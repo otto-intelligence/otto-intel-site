@@ -110,7 +110,7 @@
       <div class="wordmark"><span class="otto">OttO</span> <span class="intel">INTELLIGENCE</span></div>
     </div>
 
-    <p class="tagline">te mira&nbsp;·&nbsp;entiende&nbsp;·&nbsp;trabaja por ti</p>
+    <p class="tagline" data-es="te mira&nbsp;·&nbsp;entiende&nbsp;·&nbsp;trabaja por ti" data-en="observes&nbsp;·&nbsp;understands&nbsp;·&nbsp;works for you">te mira&nbsp;·&nbsp;entiende&nbsp;·&nbsp;trabaja por ti</p>
 
     <hr class="rule">
 
@@ -133,7 +133,7 @@
     function setLang(lang) {
       document.documentElement.lang = lang;
       document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-        el.textContent = el.getAttribute('data-' + lang);
+        el.innerHTML = el.getAttribute('data-' + lang);
       });
       buttons.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
     }
