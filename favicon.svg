@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" fill="none">
+  <title>OttO</title>
+  <circle cx="70" cy="70" r="50" stroke="#1A1A17" stroke-width="16"></circle>
+  <path d="M 109 39 Q 160 31 211 39" stroke="#1A1A17" stroke-width="16" stroke-linecap="round" fill="none"></path>
+  <circle cx="250" cy="70" r="50" stroke="#1A1A17" stroke-width="16"></circle>
+  <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="#1A1A17" stroke-width="13.6" stroke-linecap="round" fill="none"></path>
+</svg>
