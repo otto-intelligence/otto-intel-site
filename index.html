@@ -1,143 +1,615 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Otto Intel</title>
-  <meta name="description" content="Soluciones para tu negocio. Sin humo. IA cuando es necesario.">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --ink: #1A1A17;
-      --paper: #F4EFE5;
-      --amber: #C97A4A;
-      --muted: #9a9488;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100dvh;
-      padding: 32px;
-      -webkit-font-smoothing: antialiased;
-    }
-    main {
-      text-align: center;
-      max-width: 540px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 36px;
-    }
-    .brand {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-    }
-    .logo { width: 152px; height: auto; }
-    .wordmark {
-      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-weight: 700;
-      font-size: 30px;
-      color: var(--ink);
-    }
-    .wordmark .otto { letter-spacing: -0.01em; }
-    .wordmark .intel { letter-spacing: 0.04em; margin-left: 0.12em; }
-    .tagline {
-      font-size: 13px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .rule { width: 56px; height: 2px; background: var(--amber); border: none; }
-    .statement {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-style: italic;
-      font-size: clamp(22px, 5vw, 30px);
-      line-height: 1.3;
-      color: var(--ink);
-      max-width: 480px;
-    }
-    .cta {
-      display: inline-block;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--paper);
-      background: var(--amber);
-      padding: 13px 28px;
-      border-radius: 999px;
-      text-decoration: none;
-      transition: opacity 0.15s ease;
-    }
-    .cta:hover { opacity: 0.88; }
-    footer {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 12px;
-      color: var(--muted);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      margin-top: 8px;
-    }
-    .lang { display: flex; gap: 8px; font-size: 12px; }
-    .lang button {
-      background: none; border: none; cursor: pointer;
-      font: inherit; color: var(--muted); padding: 2px 4px;
-    }
-    .lang button.active { color: var(--ink); font-weight: 500; }
-    .lang span { color: var(--muted); }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OttO INTELLIGENCE · Soluciones para tu negocio. Sin humo.</title>
+<meta name="description" content="Otto Intel diseña e implementa flujos de trabajo con IA que sí se operan: diagnóstico, diseño, implementación y gobernanza. Sin humo. IA cuando es necesario.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+/* ---------------------------------------------------------------------------
+   OttO INTELLIGENCE · split-stage.
+   Two grounds, one per side, and they hold. Papel is what they have now;
+   Bosque is what it could be. The divider is the chrome. The accent carries
+   one hue at two lightnesses, keyed to the ground it sits on, because a page
+   that hard-cuts between light and dark cannot clear 4.5:1 with a single stop.
+--------------------------------------------------------------------------- */
+:root {
+  --sc-canvas:     #F4EFE5;   /* Papel  */
+  --sc-surface:    #ECE6D9;   /* Bruma  */
+  --sc-ink:        #1A1A17;   /* Tinta  */
+  --sc-ink-soft:   #5C554A;
+  --sc-accent:     #A04E2C;   /* Óxido, the light-ground stop */
+  --sc-accent-ink: #F4EFE5;
+  --sc-font-display: "Instrument Serif", Georgia, serif;
+  --sc-font-text:    "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --forest:      #2F4A3E;     /* Bosque */
+  --forest-ink:  #F4EFE5;
+  --forest-soft: #A9BCAE;
+  --amber:       #C97A4A;     /* Ámbar  */
+  --amber-lift:  #E0A272;     /* the dark-ground stop, same hue, lifted */
+
+  /* the divider's position, 0 to 1 of the viewport. Act 4 drives it to 0. */
+  --dv: 0.5;
+  --rule: 1px;
+}
+
+html { background: var(--sc-canvas); }
+body { background: transparent; color: var(--sc-ink); }
+
+/* --- the two grounds ------------------------------------------------------
+   Papel is the page. Bosque is painted per section, clipped to the right of
+   the divider, so the collapse in act 4 is a real wipe and not a resize. Per
+   section rather than one fixed pane on purpose: a hard-cutting grammar wants
+   painted grounds, and a fixed pane is invisible to the contrast harness,
+   which samples the element under the text. */
+.act { position: relative; }
+.pane {
+  position: sticky; top: 0; height: 100vh; height: 100svh;
+  margin-bottom: -100vh; z-index: 0; pointer-events: none;
+  background: var(--forest);
+  clip-path: inset(0 0 0 calc(var(--dv) * 100%));
+}
+@supports (height: 100svh) { .pane { margin-bottom: -100svh; } }
+.pane::after {
+  content: ""; position: absolute; inset: 0; opacity: .5;
+  background-image: radial-gradient(rgba(244,239,229,.05) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+.act > [data-sc-stage] { z-index: 1; }             /* sticky comes from the engine */
+.act > .split:not([data-sc-stage]),
+.act > .close { position: relative; z-index: 1; }
+
+/* --- the divider is the chrome -------------------------------------------- */
+.rig {
+  position: fixed; top: 0; bottom: 0; left: 0; width: 1px;
+  transform: translateX(calc(var(--dv) * 100vw));
+  background: #8A8375;
+  z-index: 40; pointer-events: none;
+}
+.rig__mark {
+  position: absolute; top: clamp(18px, 4.5vh, 44px); left: 50%;
+  width: clamp(132px, 15vw, 214px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+.rig__mark svg { display: block; width: 100%; height: auto; overflow: visible; }
+.rig__lens { stroke: var(--sc-ink); }
+.rig__lens--r { stroke: var(--forest-ink); }
+.rig__pupil { fill: var(--sc-ink); transition: opacity 160ms var(--sc-ease-out); }
+.rig__pupil--r { fill: var(--forest-ink); }
+.rig__lid { fill: none; }
+
+/* side labels, set along the divider. This is the nav: it says which side is
+   which, and the tick says how far through the argument you are. */
+.rig__side {
+  position: absolute; top: 50%; font-size: 10px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.rig__side--l { right: 14px; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl; color: var(--sc-ink-soft); }
+.rig__side--r { left: 14px; transform: translateY(-50%); writing-mode: vertical-rl; color: var(--forest-soft); }
+
+.rig__tick {
+  position: absolute; left: 50%; top: 0; width: 3px; height: 64px;
+  margin-left: -1.5px; border-radius: 2px;
+  background: var(--sc-accent);
+  transform: translateY(calc(var(--sc-page, 0) * (100vh - 64px)));
+}
+.rig__tag {
+  position: absolute; left: 50%; bottom: clamp(16px, 4vh, 40px);
+  transform: translateX(-50%);
+  font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  white-space: nowrap; color: var(--sc-ink-soft);
+}
+
+/* --- shared split layout --------------------------------------------------- */
+main { position: relative; z-index: 1; }
+
+.split {
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; min-height: 100vh;
+  column-gap: clamp(48px, 9vw, 140px);
+  padding-inline: clamp(20px, 5vw, 88px);
+  padding-block: clamp(96px, 16vh, 190px) clamp(40px, 8vh, 96px);
+}
+/* A flow section straight after a pinned act inherits a whole viewport of the
+   stage sliding off. Full section padding on top of that is a scroll tax. */
+.split--tight { min-height: 88vh; padding-block: clamp(40px, 7vh, 84px) clamp(32px, 6vh, 72px); }
+/* Do not declare height here either. .sc-stage sets 100vh, and a sticky element
+   as tall as its own container never sticks. Padding and alignment only. */
+[data-sc-stage].split, [data-sc-stage].peak {
+  min-height: 0;
+  padding-block: clamp(132px, 20vh, 230px) clamp(24px, 5vh, 64px);
+  align-content: center;
+}
+.side { max-width: 34ch; }
+.side--have { justify-self: end; }
+.side--could {
+  justify-self: start;
+  --sc-ink: var(--forest-ink); --sc-ink-soft: var(--forest-soft);
+  --sc-accent: var(--amber-lift);
+  color: var(--forest-ink);
+}
+.label {
+  font-size: 10px; font-weight: 600; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--sc-ink-soft);
+  margin-bottom: var(--sc-5);
+}
+.claim {
+  font-family: var(--sc-font-display); font-weight: 400;
+  font-size: clamp(2rem, 4.4vw, 3.5rem); line-height: 1.04;
+  letter-spacing: var(--sc-track-tight); text-wrap: balance;
+  color: var(--sc-ink);
+}
+.claim em { font-style: italic; color: var(--sc-accent); }
+.say { font-size: var(--sc-t-base); line-height: 1.6; color: var(--sc-ink-soft); text-wrap: pretty; }
+.say + .say { margin-top: var(--sc-4); }
+.say--own { color: var(--sc-ink); }
+
+/* --- act 2 · the inventory -------------------------------------------------- */
+.tally { list-style: none; margin: 0; padding: 0; }
+.tally li {
+  display: flex; gap: var(--sc-4); align-items: baseline;
+  padding-block: var(--sc-3);
+  border-top: var(--rule) solid color-mix(in oklab, var(--sc-ink) 14%, transparent);
+  font-size: var(--sc-t-base); color: var(--sc-ink);
+}
+.tally li:last-child { border-bottom: var(--rule) solid color-mix(in oklab, var(--sc-ink) 14%, transparent); }
+.tally b { font-weight: 500; }
+.tally span { margin-left: auto; font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+/* the drain: the inventory empties in the tail of act 2, which is the authored
+   silence in front of the peak. */
+.drain {
+  opacity: clamp(0, calc((0.97 - var(--sc-p, 0)) / 0.11), 1);
+  transform: translateY(calc(clamp(0, calc((var(--sc-p, 0) - 0.86) / 0.11), 1) * -10px));
+}
+.verdict { margin-top: var(--sc-6); }
+/* The range of the work. Numbered, unruled: deliberately not a mirror of the
+   tally opposite it, and deliberately not a grid of cards. */
+.scope { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+.scope li {
+  counter-increment: s; position: relative; padding-left: 2.4em;
+  padding-block: var(--sc-2);
+  font-size: var(--sc-t-base); line-height: 1.45; color: var(--sc-ink);
+}
+.scope li::before {
+  content: counter(s, decimal-leading-zero);
+  position: absolute; left: 0; top: var(--sc-2);
+  font-size: var(--sc-t-xs); font-variant-numeric: tabular-nums;
+  color: var(--sc-accent);
+}
+.scope__end { margin-top: var(--sc-5); }
+
+/* --- act 3 · the peak. The method draws itself. ----------------------------- */
+.peak { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(40px, 4.4vw, 64px);
+        align-items: center; padding-inline: clamp(20px, 3.4vw, 48px); }
+.peak__col--have { max-width: 32ch; justify-self: end; }
+.peak__col--could { justify-self: start; }
+.graph { width: 100%; max-width: 100%; overflow: visible; }
+.graph .wire { fill: none; stroke: var(--amber-lift); stroke-width: 2; stroke-linecap: round;
+               stroke-dasharray: var(--len); stroke-dashoffset: var(--off); }
+.graph .node  { fill: var(--forest); stroke: var(--forest-ink); stroke-width: 1.6; }
+.graph .node--gate { stroke: var(--amber-lift); }
+.graph text   { font-family: var(--sc-font-text); font-size: 12px; font-weight: 500;
+                fill: var(--forest-ink); letter-spacing: .01em; }
+.graph .n     { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.graph .n--on { opacity: 1; }
+.graph .n     { transition: opacity 420ms var(--sc-ease-out); }
+.turns { display: grid; }
+.turns > .turn { grid-area: 1 / 1; align-self: start; }
+.turn {
+  font-family: var(--sc-font-display); font-weight: 400;
+  font-size: clamp(1.45rem, 2.7vw, 2.15rem); line-height: 1.12;
+  letter-spacing: var(--sc-track-tight); text-wrap: balance;
+  color: var(--sc-ink);
+}
+.peak__note { margin-top: var(--sc-6); max-width: 34ch; }
+
+/* --- act 4 · the collapse --------------------------------------------------- */
+.close { min-height: 175vh; }
+.close__hold {
+  position: sticky; top: 0; height: 100vh; height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(96px, 18vh, 200px) clamp(20px, 6vw, 96px) clamp(28px, 5vh, 56px);
+  --sc-ink: var(--forest-ink); --sc-ink-soft: var(--forest-soft);
+  --sc-accent: var(--amber-lift);
+  color: var(--forest-ink);
+}
+.close__slide { transform: translateX(calc(var(--dv) * 100vw)); }
+.close__inner { max-width: 30ch; }
+.close .claim { font-size: clamp(2.2rem, 5.4vw, 4.2rem); }
+.arc {
+  margin-top: var(--sc-6); font-size: var(--sc-t-xs);
+  letter-spacing: .06em; color: var(--forest-soft);
+}
+.offer {
+  margin-top: var(--sc-5); font-size: 11px; font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--amber-lift);
+}
+.cta {
+  display: inline-block; margin-top: var(--sc-4);
+  background: var(--amber); color: #1A1A17;
+  font-weight: 600; font-size: var(--sc-t-base);
+  padding: 14px 30px; border-radius: var(--sc-r-pill);
+  text-decoration: none; white-space: nowrap;
+  transition: transform 140ms var(--sc-ease-out), background 140ms var(--sc-ease-out);
+}
+.cta:hover { background: var(--amber-lift); }
+.cta:active { transform: translateY(1px); }
+.cta:focus-visible { outline: 2px solid var(--forest-ink); outline-offset: 3px; }
+.foot {
+  margin-top: auto; padding-top: var(--sc-8);
+  display: flex; flex-wrap: wrap; gap: var(--sc-3) var(--sc-6); align-items: center;
+  font-size: var(--sc-t-xs); color: var(--forest-soft);
+}
+.wordmark {
+  font-family: "DM Sans", var(--sc-font-text); font-weight: 700;
+  font-size: 14px; letter-spacing: .04em; color: var(--forest-ink);
+}
+.wordmark .i { letter-spacing: .13em; margin-left: .2em; }
+.foot a { color: var(--forest-soft); text-underline-offset: 3px; }
+.foot a:hover { color: var(--forest-ink); }
+.lang { display: flex; gap: 6px; margin-left: auto; }
+.lang button {
+  background: none; border: 0; padding: 3px 5px; cursor: pointer;
+  font: inherit; color: var(--forest-soft); border-radius: var(--sc-r-sm);
+}
+.lang button[aria-pressed="true"] { color: var(--forest-ink); font-weight: 600; }
+.lang button:focus-visible { outline: 2px solid var(--amber-lift); outline-offset: 2px; }
+
+/* --- phone: the split turns horizontal. Both sides still present, always. --- */
+@media (max-width: 860px) {
+  /* Portrait paints the ground on the column itself rather than clipping one
+     pane at 50%. A clipped pane has to agree with wherever the column boundary
+     actually lands, and it kept disagreeing by 40 to 90px as content changed
+     height, which put ink on Bosque and cream on Papel. Painting the column
+     makes the two the same edge by construction. The divider then follows the
+     measured boundary instead of the other way round. */
+  .pane { display: none; }
+  .side--could, .peak__col--could, .close__hold { background: var(--forest); }
+  .act { background: var(--sc-canvas); }
+  #hablemos { background: var(--forest); }
+  .rig {
+    top: 0; left: 0; right: 0; bottom: auto; width: auto; height: 1px;
+    transform: translateY(calc(var(--dv) * 100vh));
+  }
+  .rig__mark { top: 50%; left: clamp(16px, 5vw, 28px); transform: translateY(-50%); width: 108px; }
+  .rig__side, .rig__tag { display: none; }
+  .rig__tick { top: 50%; left: 0; width: 48px; height: 3px; margin: -1.5px 0 0 0;
+               transform: translateX(calc(var(--sc-page, 0) * (100vw - 48px))); }
+  .split, .peak {
+    grid-template-columns: 1fr; row-gap: 0; align-items: stretch;
+    padding-inline: clamp(20px, 6vw, 40px);
+  }
+  .split, .split--tight { padding-block: 0; min-height: 100vh; }
+  [data-sc-stage].split, [data-sc-stage].peak {
+    padding-block: 0; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    align-content: stretch;
+  }
+  .split { grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  /* The method needs more than half a phone. Uneven rows are safe now that the
+     ground is painted on the column and the divider follows its measured edge:
+     the two cannot disagree. Centring content taller than its own row pushed it
+     out of both ends, which is how the label ended up above its own ground. */
+  .peak, [data-sc-stage].peak { grid-template-rows: minmax(0, 0.78fr) minmax(0, 1.22fr); }
+  .graph { max-height: 32vh; }
+  .peak .peak__col--could { justify-content: flex-start; row-gap: var(--sc-2); }
+  .peak .peak__col--have { justify-content: center; }
+  .peak__col--have { max-width: none; justify-self: stretch; }
+  .close__slide { transform: none; }
+  .side, .peak__col {
+    max-width: none; min-height: 0; display: flex; flex-direction: column;
+    justify-content: center; overflow: hidden;
+    padding-block: clamp(56px, 9vh, 92px) clamp(16px, 3vh, 28px);
+  }
+  .side--have, .side--could { justify-self: stretch; }
+  /* A cue element can sit a few px above its own column box once the engine's
+     rise is applied, and a label straddling the ground edge fails contrast on
+     the pixels above it. Extra top padding keeps every child clear of the seam. */
+  .side--could, .peak__col--could { padding-block: clamp(30px, 5.4vh, 52px) clamp(40px, 7vh, 72px); }
+  .claim { font-size: clamp(1.75rem, 7.4vw, 2.4rem); }
+  .close .claim { font-size: clamp(2rem, 8.4vw, 2.8rem); }
+  .graph { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drain { opacity: 1; transform: none; }
+}
+</style>
 </head>
 <body>
-  <main>
-    <div class="brand">
-      <svg class="logo" viewBox="0 0 700 360" fill="none" aria-label="OttO Intelligence" role="img">
-        <circle cx="160" cy="150" r="100" stroke="#1A1A17" stroke-width="14"></circle>
-        <path d="M 260 150 Q 350 126 440 150" stroke="#1A1A17" stroke-width="14" stroke-linecap="round" fill="none"></path>
-        <circle cx="540" cy="150" r="100" stroke="#1A1A17" stroke-width="14"></circle>
-        <path d="M 334 255 Q 372 283 410 259 T 424 237" stroke="#1A1A17" stroke-width="10.5" stroke-linecap="round" fill="none"></path>
-      </svg>
-      <div class="wordmark"><span class="otto">OttO</span> <span class="intel">INTELLIGENCE</span></div>
-    </div>
 
-    <p class="tagline" data-es="te mira&nbsp;·&nbsp;entiende&nbsp;·&nbsp;trabaja por ti" data-en="observes&nbsp;·&nbsp;understands&nbsp;·&nbsp;works for you">te mira&nbsp;·&nbsp;entiende&nbsp;·&nbsp;trabaja por ti</p>
+<span data-sc-progress></span>
 
-    <hr class="rule">
+<!-- The divider is the chrome. It carries both side labels, the wordmark, the
+     progress of the argument, and the glasses that watch you read. -->
+<div class="rig" id="rig" aria-hidden="true">
+  <div class="rig__mark">
+    <svg viewBox="0 0 320 200" fill="none" role="img" aria-label="OttO">
+      <circle class="rig__lens" cx="70" cy="70" r="50" stroke-width="16"></circle>
+      <circle class="rig__lens rig__lens--r" cx="250" cy="70" r="50" stroke-width="16"></circle>
+      <path class="rig__lens" d="M 109 39 Q 160 31 211 39" stroke-width="16" stroke-linecap="round"></path>
+      <circle class="rig__pupil" id="pupL" cx="70" cy="70" r="15"></circle>
+      <circle class="rig__pupil rig__pupil--r" id="pupR" cx="250" cy="70" r="15"></circle>
+      <path class="rig__lens" d="M 152 150 Q 178 170 204 152 T 214 136" stroke-width="13.6" stroke-linecap="round"></path>
+    </svg>
+  </div>
+  <div class="rig__side rig__side--l" data-es="lo que tienes" data-en="what you have">lo que tienes</div>
+  <div class="rig__side rig__side--r" data-es="lo que podría ser" data-en="what it could be">lo que podría ser</div>
+  <div class="rig__tick"></div>
+  <div class="rig__tag" data-es="te mira · entiende · trabaja por ti" data-en="observes · understands · works for you">te mira · entiende · trabaja por ti</div>
+</div>
 
-    <p class="statement" data-es="Soluciones para tu negocio. Sin humo. IA cuando es necesario." data-en="Solutions for your business. No hype. AI when it's needed.">Soluciones para tu negocio. Sin humo. IA cuando es necesario.</p>
+<main id="top">
 
-    <a class="cta" href="mailto:contact@otto-intel.com" data-es="Hablemos" data-en="Let's talk">Hablemos</a>
-
-    <footer>
-      <div>OttO-Intel · Puerto Vallarta</div>
-      <div class="lang">
-        <button data-lang="es" class="active">ES</button>
-        <span>·</span>
-        <button data-lang="en">EN</button>
+  <!-- 1 · RECOGNITION · pin. Both headlines readable at once, before a scroll. -->
+  <section class="act" data-sc-act="pin" data-sc-span="1.5" aria-label="Dos negocios">
+    <div class="pane" aria-hidden="true"></div>
+    <div data-sc-stage class="split">
+      <div class="side side--have" data-sc-cue="0 1 0 0.2">
+        <p class="label" data-es="Hoy" data-en="Today">Hoy</p>
+        <h1 class="claim" data-sc-kinetic="lines"
+            data-es="El negocio camina porque tú te acuerdas."
+            data-en="The business runs because you remember.">El negocio camina porque tú te acuerdas.</h1>
       </div>
-    </footer>
-  </main>
+      <div class="side side--could" data-sc-cue="0 1 0 0.2">
+        <p class="label" data-es="Podría" data-en="Could be">Podría</p>
+        <h2 class="claim"
+            data-es="El negocio camina porque <em>está escrito</em>."
+            data-en="The business runs because <em>it is written down</em>.">El negocio camina porque <em>está escrito</em>.</h2>
+      </div>
+    </div>
+  </section>
 
-  <script>
-    const buttons = document.querySelectorAll('.lang button');
-    function setLang(lang) {
-      document.documentElement.lang = lang;
-      document.querySelectorAll('[data-' + lang + ']').forEach(el => {
-        el.innerHTML = el.getAttribute('data-' + lang);
-      });
-      buttons.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  <!-- 2 · UNEASE · flow. The inventory. Real items from the positioning doc, no
+       invented numbers anywhere. The tail drains: authored silence before the
+       peak, recorded in BRIEF.md. -->
+  <section class="act" data-sc-act="flow" aria-label="Lo que en realidad falla">
+    <div class="pane" aria-hidden="true"></div>
+    <div class="split split--tight">
+      <div class="side side--have">
+        <p class="label" data-es="El inventario" data-en="The inventory">El inventario</p>
+        <ul class="tally drain" data-sc-in data-sc-stagger="60">
+          <li><b data-es="Ejecución inconsistente" data-en="Inconsistent execution">Ejecución inconsistente</b></li>
+          <li><b data-es="Conocimiento disperso" data-en="Scattered knowledge">Conocimiento disperso</b></li>
+          <li><b data-es="Todo pasa por el dueño" data-en="Everything goes through the owner">Todo pasa por el dueño</b></li>
+          <li><b data-es="Traspasos lentos" data-en="Slow handoffs">Traspasos lentos</b></li>
+          <li><b data-es="Poca visibilidad" data-en="Low visibility">Poca visibilidad</b></li>
+          <li><b data-es="Retrabajo evitable" data-en="Avoidable rework">Retrabajo evitable</b></li>
+        </ul>
+        <p class="say say--own verdict" data-sc-in
+           data-es="Ninguno de estos es un problema de inteligencia artificial."
+           data-en="None of these is an artificial intelligence problem.">Ninguno de estos es un problema de inteligencia artificial.</p>
+      </div>
+      <div class="side side--could">
+        <p class="label" data-es="El trabajo" data-en="The work">El trabajo</p>
+        <ol class="scope" data-sc-in data-sc-stagger="60">
+          <li data-es="Diagnóstico de flujo y traducción de negocio" data-en="Workflow diagnosis and business translation">Diagnóstico de flujo y traducción de negocio</li>
+          <li data-es="Fuentes canónicas y bases de conocimiento" data-en="Canonical sources and knowledge bases">Fuentes canónicas y bases de conocimiento</li>
+          <li data-es="Agentes y grafos de trabajo" data-en="Agents and workflow graphs">Agentes y grafos de trabajo</li>
+          <li data-es="Documentos, voz e imagen" data-en="Documents, voice and vision">Documentos, voz e imagen</li>
+          <li data-es="Validación, observabilidad y respaldo" data-en="Validation, observability and fallback">Validación, observabilidad y respaldo</li>
+          <li data-es="Adopción y gobernanza" data-en="Adoption and governance">Adopción y gobernanza</li>
+        </ol>
+        <p class="say say--own scope__end" data-sc-in
+           data-es="IA sólo donde ayuda. Lo demás es sistema."
+           data-en="AI only where it helps. The rest is systems.">IA sólo donde ayuda. Lo demás es sistema.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · CLARITY · pin, span 4.6. THE PEAK. The method draws itself under the
+       reader's hand while the left column names what each node replaces. -->
+  <section id="metodo" class="act" data-sc-act="pin" data-sc-span="4.6" aria-label="El método, corriendo">
+    <div class="pane" aria-hidden="true"></div>
+    <div data-sc-stage class="peak">
+      <div class="peak__col peak__col--have side--have">
+        <p class="label" data-sc-cue="0 1 0 0" data-es="Lo que reemplaza" data-en="What it replaces">Lo que reemplaza</p>
+        <div class="turns">
+        <p class="turn" data-sc-cue="0 0.30 0"
+           data-es="Cada quien trabaja con su propia versión del archivo."
+           data-en="Everyone works from their own version of the file.">Cada quien trabaja con su propia versión del archivo.</p>
+        <p class="turn" data-sc-cue="0.24 0.56"
+           data-es="La instrucción vive en la cabeza de alguien."
+           data-en="The instruction lives inside somebody's head.">La instrucción vive en la cabeza de alguien.</p>
+        <p class="turn" data-sc-cue="0.50 0.82"
+           data-es="Nadie revisa hasta que el cliente reclama."
+           data-en="Nobody checks it until the client complains.">Nadie revisa hasta que el cliente reclama.</p>
+        <p class="turn" data-sc-cue="0.72 1 0.09 0"
+           data-es="No queda rastro de por qué se decidió así."
+           data-en="No trace is left of why it was decided that way.">No queda rastro de por qué se decidió así.</p>
+        </div>
+      </div>
+      <div class="peak__col peak__col--could side--could">
+        <p class="label" data-sc-cue="0 1 0 0" data-es="El método, corriendo" data-en="The method, running">El método, corriendo</p>
+        <svg class="graph" id="graph" viewBox="0 0 460 330" role="img"
+             aria-label="Flujo gobernado: fuente canónica, contexto, nodo de modelo, validador, aprobación humana, registro.">
+          <path class="wire" id="w1" d="M 64 44 L 64 92"></path>
+          <path class="wire" id="w2" d="M 64 128 L 64 176"></path>
+          <path class="wire" id="w3" d="M 64 212 L 64 260"></path>
+          <path class="wire" id="w4" d="M 118 278 L 300 278 L 300 224"></path>
+          <path class="wire" id="w5" d="M 300 188 L 300 128"></path>
+          <path class="wire" id="w6" d="M 300 92 L 300 44 L 190 44"></path>
+
+          <g class="n" data-at="0.00"><rect class="node" x="8" y="12" width="180" height="32" rx="6"></rect><text x="24" y="33" data-es="Fuente canónica" data-en="Canonical source">Fuente canónica</text></g>
+          <g class="n" data-at="0.14"><rect class="node" x="8" y="96" width="180" height="32" rx="6"></rect><text x="24" y="117" data-es="Contexto acotado" data-en="Scoped context">Contexto acotado</text></g>
+          <g class="n" data-at="0.30"><rect class="node" x="8" y="180" width="180" height="32" rx="6"></rect><text x="24" y="201" data-es="Nodo de modelo" data-en="Model node">Nodo de modelo</text></g>
+          <g class="n" data-at="0.46"><rect class="node node--gate" x="8" y="262" width="180" height="32" rx="6"></rect><text x="24" y="283" data-es="Validador" data-en="Validator">Validador</text></g>
+          <g class="n" data-at="0.62"><rect class="node node--gate" x="222" y="192" width="200" height="32" rx="6"></rect><text x="238" y="213" data-es="Aprobación humana" data-en="Human approval">Aprobación humana</text></g>
+          <g class="n" data-at="0.78"><rect class="node" x="222" y="96" width="200" height="32" rx="6"></rect><text x="238" y="117" data-es="Registro" data-en="Log">Registro</text></g>
+          <g class="n" data-at="0.90"><rect class="node" x="222" y="12" width="200" height="32" rx="6"></rect><text x="238" y="33" data-es="Vuelve a la fuente" data-en="Back to the source">Vuelve a la fuente</text></g>
+        </svg>
+        <p class="say peak__note" data-sc-cue="0.78 1 0.08 0"
+           data-es="Un flujo con dueño, con límite de revisión y con registro. Da igual dónde viva o qué tan grande sea: la forma es la misma."
+           data-en="A workflow with an owner, a review boundary, and a log. Wherever it lives and however big it gets, the shape is the same.">Un flujo con dueño, con límite de revisión y con registro. Da igual dónde viva o qué tan grande sea: la forma es la misma.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · RESOLVE · flow. The collapse: the divider travels to the edge, Bosque
+       takes the whole page, and the ask sits in the column that won. Last
+       element on the page; nothing after it. -->
+  <section id="hablemos" class="act" data-sc-act="flow" aria-label="Cómo empezar">
+    <div class="pane" aria-hidden="true"></div>
+    <div class="close">
+     <div class="close__hold">
+      <div class="close__slide"><div class="close__inner" data-sc-in data-sc-stagger="70">
+        <h2 class="claim"
+            data-es="No empezamos construyendo."
+            data-en="We do not start by building.">No empezamos construyendo.</h2>
+        <p class="say" style="margin-top:var(--sc-5)"
+           data-es="Primero entendemos el flujo. Después decidimos si hay algo que construir, qué tan grande, y quién lo va a operar cuando nosotros no estemos. El primer paso es una hora contigo."
+           data-en="First we understand the workflow. Then we decide whether there is anything to build, how big, and who runs it when we are not there. The first step is an hour with you.">Primero entendemos el flujo. Después decidimos si hay algo que construir, qué tan grande, y quién lo va a operar cuando nosotros no estemos. El primer paso es una hora contigo.</p>
+        <p class="arc" data-es="Diagnóstico · Diseño · Implementación · Gobernanza"
+           data-en="Diagnosis · Design · Implementation · Governance">Diagnóstico · Diseño · Implementación · Gobernanza</p>
+        <p class="offer">Workflow Clarity Session</p>
+        <a class="cta" id="cta" href="mailto:contact@otto-intel.com?subject=Workflow%20Clarity%20Session"
+           data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
+      </div></div>
+      <footer class="foot">
+        <span class="wordmark"><span>OttO</span><span class="i">INTELLIGENCE</span></span>
+        <span>Puerto Vallarta</span>
+        <a href="mailto:contact@otto-intel.com">contact@otto-intel.com</a>
+        <div class="lang">
+          <button type="button" data-lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </footer>
+     </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>
+(function () {
+  var api = ScrollCraft.mount(document.body);
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var root = document.documentElement;
+
+  /* ---------------------------------------------------------------------
+     SIGNATURE MOVE · the glasses watch you.
+     The mark rides the divider. Its pupils interpolate toward the pointer,
+     and independently toward whichever side the argument is currently on,
+     so at the peak they turn and hold on the method drawing itself. Both
+     inputs are the same lerp, which is what stops it reading as a widget.
+  --------------------------------------------------------------------- */
+  var pupL = document.getElementById('pupL');
+  var pupR = document.getElementById('pupR');
+  var LC = 70, RC = 250, CY = 70, REACH = 17;
+  var tx = 0, ty = 0, cx = 0, cy = 0;     // target and current, in lens units
+  var px = 0.5, py = 0.5;                 // pointer, 0 to 1 of the viewport
+
+  if (fine && !reduced) {
+    addEventListener('pointermove', function (e) {
+      px = e.clientX / innerWidth; py = e.clientY / innerHeight;
+    }, { passive: true });
+  }
+
+  /* ---------------------------------------------------------------------
+     THE COLLAPSE · act 4 drives the divider to the edge, which wipes the
+     Bosque ground across the whole page. --sc-p is published by the engine
+     on the act element; the divider is fixed, so the value has to be
+     relayed to :root. The engine is untouched.
+  --------------------------------------------------------------------- */
+  var closeAct = document.getElementById('hablemos');
+  var peakAct  = document.getElementById('metodo');
+  var nodes    = [].slice.call(document.querySelectorAll('#graph .n'));
+  var cols     = [].slice.call(document.querySelectorAll('.side--could, .peak__col--could, .close__hold'));
+  var wires    = ['w1','w2','w3','w4','w5','w6'].map(function (id) {
+    var el = document.getElementById(id);
+    var len = el.getTotalLength();
+    el.style.setProperty('--len', len);
+    el.style.setProperty('--off', len);
+    return { el: el, len: len };
+  });
+
+  function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function ease(v) { return v * v * (3 - 2 * v); }
+
+  function actP(el) {
+    var v = el && getComputedStyle(el).getPropertyValue('--sc-p');
+    var n = parseFloat(v);
+    return isFinite(n) ? n : 0;
+  }
+
+  function frame() {
+    /* page progress, for the tick on the divider */
+    var max = Math.max(1, document.body.scrollHeight - innerHeight);
+    root.style.setProperty('--sc-page', (scrollY / max).toFixed(4));
+
+    /* The divider carries the progress of the argument, so it moves twice.
+       It holds at the centre while the argument is still two-sided, then the
+       close act sends it to the edge and Bosque takes the whole page. */
+    var pp = actP(peakAct);
+    var cp = actP(closeAct);
+    var t   = ease(clamp((cp - 0.30) / 0.22));
+    var dv  = 0.5 * (1 - t);
+    if (innerWidth <= 860) {
+      /* portrait: the ground is painted on the column, so the divider follows
+         the column's real top edge instead of assuming half the viewport. */
+      var edge = null;
+      for (var i = 0; i < cols.length; i++) {
+        var b = cols[i].getBoundingClientRect();
+        if (b.bottom > 8 && b.top < innerHeight - 8) { edge = b.top; break; }
+      }
+      dv = edge === null ? dv : Math.max(0, Math.min(1, edge / innerHeight));
+      if (cp > 0.30) dv = Math.min(dv, 1 - t);
     }
-    buttons.forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
-  </script>
+    root.style.setProperty('--dv', dv.toFixed(4));
+    wires.forEach(function (w, i) {
+      var a = i * 0.155, b = a + 0.19;
+      var k = Math.min(1, Math.max(0, (pp - a) / (b - a)));
+      w.el.style.setProperty('--off', (w.len * (1 - k)).toFixed(1));
+    });
+    nodes.forEach(function (n) {
+      n.classList.toggle('n--on', pp >= parseFloat(n.dataset.at));
+    });
+
+    /* the eyes. Bias right through the peak, back to centre at the close. */
+    var bias = pp > 0.02 && pp < 0.99 ? 0.62 : 0;
+    if (t > 0.05) bias = -0.35;
+    tx = (fine && !reduced ? (px - 0.5) * 2 : 0) * 0.7 + bias;
+    ty = (fine && !reduced ? (py - 0.5) * 2 : 0) * 0.55;
+    tx = Math.max(-1, Math.min(1, tx));
+    cx += (tx - cx) * 0.09;
+    cy += (ty - cy) * 0.09;
+    pupL.setAttribute('cx', (LC + cx * REACH).toFixed(1));
+    pupR.setAttribute('cx', (RC + cx * REACH).toFixed(1));
+    pupL.setAttribute('cy', (CY + cy * REACH).toFixed(1));
+    pupR.setAttribute('cy', (CY + cy * REACH).toFixed(1));
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* --- bilingual. Kept from the live site: Spanish default, EN toggle. The
+     kinetic headline measures real line boxes, so a language change has to
+     drop the split and relayout, exactly as the engine does on fonts.ready. */
+  var buttons = [].slice.call(document.querySelectorAll('.lang button'));
+  function setLang(lang) {
+    root.lang = lang;
+    document.querySelectorAll('[data-' + lang + ']').forEach(function (el) {
+      el.innerHTML = el.getAttribute('data-' + lang);
+    });
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === lang)); });
+    api.acts.forEach(function (a) {
+      a.cues.forEach(function (q) { if (q.kinetic) { q.el.__scSplit = null; q.units = null; } });
+    });
+    api.layout();
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.dataset.lang); });
+  });
+})();
+</script>
 </body>
 </html>
