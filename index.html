@@ -159,15 +159,41 @@ main { position: relative; z-index: 0; }
 .can p span { color: var(--sc-ink-soft); font-size: .88em; line-height: 1.5; display: block; margin-top: 7px; }
 .after { margin-top: clamp(44px, 7vh, 84px); }
 
-/* --- 3 the balance ---------------------------------------------------------- */
-.bal { display: grid; gap: clamp(26px, 4vh, 50px); height: 100%; align-content: center; padding-top: var(--bar); }
-.bal__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
-.bal__col h3 { font-family: var(--sc-font-text); font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; margin: 0 0 var(--sc-4); }
-.bal__col--machine h3 { color: var(--ambar-lift); }
-.bal__col--yours h3 { color: var(--papel); }
-.bal__col ul { list-style: none; margin: 0; padding: 0; }
-.bal__col li { padding-block: clamp(9px, 1.2vh, 15px); border-top: 1px solid var(--hair); font-size: clamp(1rem, 1.45vw, 1.18rem); line-height: 1.35; color: var(--sc-ink); }
-.verdict { font-family: var(--sc-font-display); font-size: clamp(1.6rem, 3.2vw, 2.6rem); line-height: 1.1; letter-spacing: -.012em; max-width: 24ch; }
+/* --- 3 the balance. One taijitu, and the copy arranged around it. --------- */
+.yy {
+  position: relative; height: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-content: center; row-gap: clamp(14px, 2.4vh, 34px);
+  padding-top: var(--bar); padding-bottom: clamp(16px, 3vh, 40px);
+}
+.yy__sym {
+  position: absolute; left: 50%; top: 50%; z-index: 0;
+  width: min(100%, 78vh); aspect-ratio: 1; height: auto;
+  transform: translate(-50%, -50%) rotate(var(--spin, 0deg));
+  transform-origin: center;
+}
+.yy > :not(.yy__sym) { position: relative; z-index: 1; }
+.yy__head { grid-column: 1 / 9; grid-row: 1; }
+.yy__side { align-self: center; }
+.yy__side--m { grid-column: 2 / 6;  grid-row: 2; }
+.yy__side--y { grid-column: 7 / 11; grid-row: 2; align-self: end; text-align: right; }
+.yy__side h3 {
+  font-family: var(--sc-font-text); font-size: 12px; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase; margin: 0 0 var(--sc-4);
+  color: var(--ambar-lift);
+}
+.yy__side ul { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(8px, 1.1vh, 14px); }
+.yy__side li {
+  font-size: clamp(1rem, 1.42vw, 1.16rem); line-height: 1.34; color: var(--sc-ink);
+  text-wrap: pretty;
+}
+.verdict {
+  grid-column: 2 / 11; grid-row: 3; justify-self: center; text-align: center;
+  font-family: var(--sc-font-display); font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.1; letter-spacing: -.012em; max-width: 26ch;
+}
 .verdict em { font-style: italic; color: var(--ambar-lift); }
 
 /* --- 4 the phases, as cards. Orientación is the one to start on. ---------- */
@@ -175,6 +201,13 @@ main { position: relative; z-index: 0; }
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(16px, 1.8vw, 26px); align-items: stretch;
   margin-top: clamp(40px, 6vh, 72px);
+}
+@media (min-width: 1400px) {
+  .sec--wide > .wrap { max-width: 1560px; padding-right: clamp(320px, 22vw, 400px); }
+  .tiers { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.2vw, 20px); }
+  .tier { padding: clamp(18px, 1.5vw, 24px); }
+  .tier li { font-size: .93rem; }
+  .tier__d { font-size: .93rem; }
 }
 .tier {
   position: relative; border: 1px solid var(--hair); border-radius: 16px;
@@ -234,8 +267,12 @@ main { position: relative; z-index: 0; }
   :root { --bar: 60px; --lane: 118px; }
   .bar__nav { display: none; }
   .bar .cta { margin-left: auto; }
-  .can, .bal__cols, .tiers { grid-template-columns: 1fr; }
-  .bal__cols { gap: clamp(22px, 3.6vh, 38px); }
+  .can, .tiers { grid-template-columns: 1fr; }
+  .yy { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; row-gap: clamp(18px, 3vh, 30px); }
+  .yy__head, .yy__side--m, .yy__side--y, .verdict { grid-column: 1; }
+  .yy__head { grid-row: 1; } .yy__side--m { grid-row: 2; } .yy__side--y { grid-row: 3; text-align: left; align-self: start; }
+  .verdict { grid-row: 4; justify-self: start; text-align: left; }
+  .yy__sym { width: min(120%, 58vh); opacity: .5; }
   .tiers { gap: 22px; }
   .foot__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot__grid > :first-child { grid-column: 1 / -1; }
@@ -336,48 +373,70 @@ main { position: relative; z-index: 0; }
     </div>
   </section>
 
-  <!-- 3 · ribbon LEFT · black ground · column right -->
+  <!-- 3 · ribbon LEFT · black ground · the taijitu. Copy sits around the
+       symbol rather than in three stacked bands. -->
   <section id="equilibrio" class="sec sec--dark sec--ribL" data-sc-act="pin" data-sc-span="3.2" aria-label="El equilibrio">
     <div class="sec__ground" aria-hidden="true"></div>
     <div data-sc-stage>
-      <div class="wrap bal">
-        <div data-sc-cue="0 0.32 0">
+      <div class="wrap yy">
+
+        <svg class="yy__sym" id="yin" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="100" fill="var(--grey)"></circle>
+          <path d="M100,0 A100,100 0 0,0 100,200 A50,50 0 0,0 100,100 A50,50 0 0,1 100,0 Z" fill="var(--black)"></path>
+          <circle cx="100" cy="50" r="26" fill="var(--black)"></circle>
+          <circle cx="100" cy="150" r="26" fill="var(--grey)"></circle>
+          <circle cx="100" cy="100" r="99.2" fill="none" stroke="var(--ambar-lift)" stroke-width="0.7" opacity=".5"></circle>
+          <g transform="translate(100 50) scale(0.115) translate(-160 -100)" opacity=".92">
+            <circle cx="70" cy="70" r="50" stroke="var(--grey)" stroke-width="17" fill="none"></circle>
+            <circle cx="250" cy="70" r="50" stroke="var(--grey)" stroke-width="17" fill="none"></circle>
+            <path d="M 109 39 Q 160 31 211 39" stroke="var(--grey)" stroke-width="17" stroke-linecap="round" fill="none"></path>
+            <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="var(--grey)" stroke-width="14" stroke-linecap="round" fill="none"></path>
+          </g>
+          <g transform="translate(100 150) scale(0.115) translate(-160 -100)" opacity=".92">
+            <circle cx="70" cy="70" r="50" stroke="var(--black)" stroke-width="17" fill="none"></circle>
+            <circle cx="250" cy="70" r="50" stroke="var(--black)" stroke-width="17" fill="none"></circle>
+            <path d="M 109 39 Q 160 31 211 39" stroke="var(--black)" stroke-width="17" stroke-linecap="round" fill="none"></path>
+            <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="var(--black)" stroke-width="14" stroke-linecap="round" fill="none"></path>
+          </g>
+        </svg>
+
+        <div class="yy__head" data-sc-cue="0 0.34 0">
           <p class="eyebrow" data-es="El equilibrio" data-en="The balance">El equilibrio</p>
           <h2 class="h2" style="margin-top:var(--sc-5)"
               data-es="Un sistema bueno sabe qué le toca a cada quien."
               data-en="A good system knows what belongs to whom.">Un sistema bueno sabe qué le toca a cada quien.</h2>
         </div>
-        <div class="bal__cols" data-sc-cue="0.26 0.80">
-          <div class="bal__col bal__col--machine">
-            <h3 data-es="Lo que la máquina hace mejor" data-en="What the machine does better">Lo que la máquina hace mejor</h3>
-            <ul>
-              <li data-es="Repetir sin cansarse" data-en="Repeat without tiring">Repetir sin cansarse</li>
-              <li data-es="Leer mil páginas sin saltarse una" data-en="Read a thousand pages without skipping one">Leer mil páginas sin saltarse una</li>
-              <li data-es="No olvidar lo que se acordó" data-en="Never forget what was agreed">No olvidar lo que se acordó</li>
-              <li data-es="Contestar a las tres de la mañana" data-en="Answer at three in the morning">Contestar a las tres de la mañana</li>
-              <li data-es="Mantener el formato siempre igual" data-en="Hold the same format every single time">Mantener el formato siempre igual</li>
-            </ul>
-          </div>
-          <div class="bal__col bal__col--yours">
-            <h3 data-es="Lo que sigue siendo tuyo" data-en="What stays yours">Lo que sigue siendo tuyo</h3>
-            <ul>
-              <li data-es="Decidir qué importa" data-en="Deciding what matters">Decidir qué importa</li>
-              <li data-es="Poner el límite" data-en="Setting the boundary">Poner el límite</li>
-              <li data-es="Aprobar lo que sale con tu nombre" data-en="Approving what goes out with your name on it">Aprobar lo que sale con tu nombre</li>
-              <li data-es="Conocer al cliente de verdad" data-en="Actually knowing the client">Conocer al cliente de verdad</li>
-              <li data-es="Cargar con la consecuencia" data-en="Carrying the consequence">Cargar con la consecuencia</li>
-            </ul>
-          </div>
+
+        <div class="yy__side yy__side--m" data-sc-cue="0.22 0.86">
+          <h3 data-es="La máquina" data-en="The machine">La máquina</h3>
+          <ul>
+            <li data-es="Repite sin cansarse" data-en="Repeats without tiring">Repite sin cansarse</li>
+            <li data-es="Lee mil páginas sin saltarse una" data-en="Reads a thousand pages, skips none">Lee mil páginas sin saltarse una</li>
+            <li data-es="No olvida lo que se acordó" data-en="Never forgets what was agreed">No olvida lo que se acordó</li>
+            <li data-es="Contesta a las tres de la mañana" data-en="Answers at three in the morning">Contesta a las tres de la mañana</li>
+          </ul>
         </div>
-        <p class="verdict" data-sc-cue="0.72 1 0.09 0"
+
+        <div class="yy__side yy__side--y" data-sc-cue="0.30 0.90">
+          <h3 data-es="Tú" data-en="You">Tú</h3>
+          <ul>
+            <li data-es="Decides qué importa" data-en="Decide what matters">Decides qué importa</li>
+            <li data-es="Pones el límite" data-en="Set the boundary">Pones el límite</li>
+            <li data-es="Apruebas lo que sale con tu nombre" data-en="Approve what goes out with your name">Apruebas lo que sale con tu nombre</li>
+            <li data-es="Cargas con la consecuencia" data-en="Carry the consequence">Cargas con la consecuencia</li>
+          </ul>
+        </div>
+
+        <p class="verdict" data-sc-cue="0.74 1 0.09 0"
            data-es="No se trata de cuánta IA. Se trata de <em>dónde</em>, y de quién responde por ella."
            data-en="It is not about how much AI. It is about <em>where</em>, and who answers for it.">No se trata de cuánta IA. Se trata de <em>dónde</em>, y de quién responde por ella.</p>
+
       </div>
     </div>
   </section>
 
   <!-- 4 · ribbon RIGHT · grey ground · column left · the phases -->
-  <section id="fases" class="sec sec--light sec--ribR" data-sc-act="flow" aria-label="Cómo trabajamos">
+  <section id="fases" class="sec sec--light sec--ribR sec--wide" data-sc-act="flow" aria-label="Cómo trabajamos">
     <div class="sec__ground" aria-hidden="true"></div>
     <div class="wrap" style="padding-block: clamp(56px,9vh,120px) clamp(56px,9vh,120px)">
       <div data-sc-in data-sc-stagger="70">
@@ -625,6 +684,17 @@ main { position: relative; z-index: 0; }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(shape);
   // the engine sets pinned-act heights on layout, so re-measure after it settles
   setTimeout(shape, 60); setTimeout(shape, 400);
+
+  /* the symbol turns a little with the act, so the balance is alive without
+     ever becoming a spinning logo. Off entirely under reduced motion. */
+  var yy = document.getElementById('equilibrio'), sym = document.getElementById('yin');
+  if (yy && sym && !reduced) {
+    (function turn() {
+      var v = parseFloat(getComputedStyle(yy).getPropertyValue('--sc-p'));
+      sym.style.setProperty('--spin', ((isFinite(v) ? v : 0) * 26 - 13).toFixed(2) + 'deg');
+      requestAnimationFrame(turn);
+    })();
+  }
 
   /* --- bilingual. Spanish default, carried over from the live site. --- */
   var buttons = [].slice.call(document.querySelectorAll('.lang button'));
