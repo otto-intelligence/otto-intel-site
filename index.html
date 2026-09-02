@@ -12,18 +12,18 @@
 <link rel="stylesheet" href="scrollcraft.css">
 <style>
 /* ---------------------------------------------------------------------------
-   OttO INTELLIGENCE · flowing spine.
-   One continuous S runs the whole page. Sections are stations on it, and the
-   OttO mark is the dot that travels the curve, carrying the light field into
-   the dark one and back. Nothing is ever cut in half.
+   OttO INTELLIGENCE · the travelling dot.
 
-   Ground is warm off-black; Papel and Ambar come straight off the brand spec
-   and do the talking. One accent hue, two lightnesses, because the page
-   carries a dark ground and a light field at the same time.
+   One curve runs the whole document and swings side to side, once per section.
+   The OttO mark is the dot on it. When the dot is on the left the ground is
+   black and the reading column sits right; when it swings right the ground
+   lifts to warm grey and the column sits left. The mark inverts each time it
+   crosses, which is the taijitu move: the light dot inside the dark field,
+   the dark dot inside the light one.
 --------------------------------------------------------------------------- */
 :root {
   --sc-canvas:     #0E0D0B;
-  --sc-surface:    #1A1712;
+  --sc-surface:    #26221C;
   --sc-ink:        #F4EFE5;
   --sc-ink-soft:   #A79C8B;
   --sc-accent:     #E0A272;
@@ -31,45 +31,44 @@
   --sc-font-display: "Instrument Serif", Georgia, serif;
   --sc-font-text:    "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 
+  --black: #0E0D0B;
+  --grey:  #26221C;
   --papel: #F4EFE5;
   --tinta: #1A1A17;
   --ambar: #C97A4A;
   --ambar-lift: #E0A272;
 
   --bar: 68px;
-  --hair: rgba(244, 239, 229, .13);
+  --hair: rgba(244, 239, 229, .14);
+  --lane: 150px;          /* how much room the ribbon keeps beside the column */
 }
+@media (min-width: 1100px) { :root { --lane: clamp(300px, 26vw, 400px); } }
 
-html { background: var(--sc-canvas); }
-body { background: var(--sc-canvas); color: var(--sc-ink); }
+html { background: var(--black); }
+body { background: var(--black); color: var(--sc-ink); }
 ::selection { background: var(--ambar); color: var(--tinta); }
 
-/* --- the spine ------------------------------------------------------------
-   Fixed, full viewport, drawn across the whole scroll. It is the only
-   continuous element on the page, which is what makes the sections read as
-   stations on one journey rather than as slides. */
-.spine { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-.spine__wash { fill: var(--papel); opacity: .038; }
-.spine__ghost { fill: none; stroke: var(--papel); stroke-width: 1; vector-effect: non-scaling-stroke; opacity: .10; }
+/* --- the ribbon: absolute, the height of the whole document ---------------- */
+.spine { position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none; }
+.spine__ghost { fill: none; stroke: var(--papel); stroke-width: 1; opacity: .12; }
 .spine__line {
-  fill: none; stroke: var(--ambar-lift); stroke-width: 1.6;
-  vector-effect: non-scaling-stroke; stroke-linecap: round;
-  stroke-dasharray: var(--len); stroke-dashoffset: var(--off); opacity: .9;
+  fill: none; stroke: var(--ambar-lift); stroke-width: 1.8; stroke-linecap: round;
+  stroke-dasharray: var(--len); stroke-dashoffset: var(--off); opacity: .92;
 }
 
-/* --- the dot: the mark IS the dot, and it walks the boundary -------------- */
+/* --- the dot -------------------------------------------------------------- */
 .dot {
-  position: fixed; top: 0; left: 0; z-index: 3;
-  width: clamp(58px, 6.6vw, 88px); aspect-ratio: 1;
-  margin: calc(clamp(58px, 6.6vw, 88px) / -2);
+  position: fixed; top: 0; left: 0; z-index: 4;
+  width: clamp(58px, 6.4vw, 86px); aspect-ratio: 1;
+  margin: calc(clamp(58px, 6.4vw, 86px) / -2);
   border-radius: 50%; display: grid; place-items: center; pointer-events: none;
   background: var(--papel);
-  box-shadow: 0 12px 38px rgba(0,0,0,.55), inset 0 0 0 1px rgba(26,26,23,.10);
-  transition: background 700ms var(--sc-ease-out), box-shadow 700ms var(--sc-ease-out);
+  box-shadow: 0 14px 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(26,26,23,.10);
+  transition: background 600ms var(--sc-ease-out), box-shadow 600ms var(--sc-ease-out);
 }
 .dot svg { width: 62%; height: auto; overflow: visible; }
-.dot .st { stroke: var(--tinta); transition: stroke 700ms var(--sc-ease-out); }
-.dot--flip { background: var(--tinta); box-shadow: 0 12px 38px rgba(0,0,0,.65), inset 0 0 0 1.5px var(--ambar); }
+.dot .st { stroke: var(--tinta); transition: stroke 600ms var(--sc-ease-out); }
+.dot--flip { background: var(--tinta); box-shadow: 0 14px 40px rgba(0,0,0,.7), inset 0 0 0 1.5px var(--ambar); }
 .dot--flip .st { stroke: var(--papel); }
 
 /* --- the bar --------------------------------------------------------------- */
@@ -77,7 +76,7 @@ body { background: var(--sc-canvas); color: var(--sc-ink); }
   position: fixed; inset: 0 0 auto 0; height: var(--bar); z-index: 50;
   display: flex; align-items: center; gap: clamp(16px, 3vw, 40px);
   padding-inline: clamp(16px, 4vw, 48px);
-  background: color-mix(in oklab, var(--sc-canvas) 84%, transparent);
+  background: color-mix(in oklab, var(--black) 84%, transparent);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(244, 239, 229, .09);
 }
@@ -85,29 +84,38 @@ body { background: var(--sc-canvas); color: var(--sc-ink); }
 .bar__mark svg { width: 40px; height: auto; }
 .bar__mark .st { stroke: var(--sc-ink); }
 .bar__mark:focus-visible { outline: 2px solid var(--ambar-lift); outline-offset: 4px; border-radius: 4px; }
-.wordmark {
-  font-family: "DM Sans", var(--sc-font-text); font-weight: 700;
-  font-size: 15px; letter-spacing: .02em; white-space: nowrap;
-}
+.wordmark { font-family: "DM Sans", var(--sc-font-text); font-weight: 700; font-size: 15px; letter-spacing: .02em; white-space: nowrap; }
 .wordmark .i { letter-spacing: .12em; margin-left: .22em; font-weight: 500; }
 .bar__nav { display: flex; gap: clamp(14px, 2.2vw, 30px); margin-left: auto; }
-.bar__nav a {
-  font-size: 14px; font-weight: 500; color: var(--sc-ink-soft);
-  text-decoration: none; padding: 6px 2px;
-  transition: color 150ms var(--sc-ease-out);
-}
+.bar__nav a { font-size: 14px; font-weight: 500; color: var(--sc-ink-soft); text-decoration: none; padding: 6px 2px; transition: color 150ms var(--sc-ease-out); }
 .bar__nav a:hover { color: var(--sc-ink); }
 .bar__nav a:focus-visible { outline: 2px solid var(--ambar-lift); outline-offset: 3px; border-radius: 3px; }
 .bar .cta { margin-left: clamp(12px, 2vw, 28px); padding: 10px 20px; font-size: 14px; }
 
-/* --- type. Every step larger than the default ramp. ----------------------- */
-main { position: relative; z-index: 1; }
+/* --- sections. The ground is a layer under the ribbon, not on the section,
+       so the curve stays visible across every field change. ------------------ */
+main { position: relative; z-index: 0; }
+.sec { position: relative; }
+.sec__ground { position: absolute; inset: 0; z-index: 0; }
+.sec--dark  .sec__ground { background: var(--black); }
+.sec--light .sec__ground { background: var(--grey); }
+.sec > .wrap, .sec > .stagewrap { position: relative; z-index: 2; }
+.sec [data-sc-stage] { z-index: 2; }
+
+/* the column sits opposite the ribbon */
 .wrap {
   max-width: 1280px; margin-inline: auto;
-  padding-left: clamp(20px, 5vw, 64px);
-  padding-right: clamp(106px, 12vw, 150px);  /* the ribbon's lane */
+  padding-left: clamp(20px, 5vw, 64px); padding-right: clamp(20px, 5vw, 64px);
 }
-@media (min-width: 1100px) { .wrap { padding-right: clamp(300px, 26vw, 400px); } }
+@media (min-width: 1100px) {
+  .sec--ribL > .wrap, .sec--ribL [data-sc-stage] > .wrap { padding-left: var(--lane); }
+  .sec--ribR > .wrap, .sec--ribR [data-sc-stage] > .wrap { padding-right: var(--lane); }
+}
+@media (max-width: 1099px) {
+  .sec > .wrap, .sec [data-sc-stage] > .wrap { padding-right: var(--lane); }
+}
+
+/* --- type ------------------------------------------------------------------ */
 .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ambar-lift); }
 .h1 {
   font-family: var(--sc-font-display); font-weight: 400;
@@ -143,18 +151,15 @@ main { position: relative; z-index: 1; }
 
 /* --- 1 hero ---------------------------------------------------------------- */
 .hero { display: flex; align-items: center; height: 100%; padding-top: var(--bar); }
-.hero__in { display: flex; flex-direction: column; gap: clamp(16px, 2.2vh, 30px); max-width: none; }
+.hero__in { display: flex; flex-direction: column; gap: clamp(16px, 2.2vh, 30px); }
 
 /* --- 2 what is already possible ------------------------------------------- */
 .can { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(32px, 5vw, 80px); margin-top: clamp(40px, 6vh, 72px); }
-.can p {
-  margin: 0; padding-block: clamp(13px, 1.6vh, 20px); border-top: 1px solid var(--hair);
-  font-size: clamp(1.05rem, 1.65vw, 1.28rem); line-height: 1.3; color: var(--sc-ink);
-}
+.can p { margin: 0; padding-block: clamp(13px, 1.6vh, 20px); border-top: 1px solid var(--hair); font-size: clamp(1.05rem, 1.65vw, 1.28rem); line-height: 1.3; color: var(--sc-ink); }
 .can p span { color: var(--sc-ink-soft); font-size: .88em; line-height: 1.5; display: block; margin-top: 7px; }
 .after { margin-top: clamp(44px, 7vh, 84px); }
 
-/* --- 3 the balance. The peak. --------------------------------------------- */
+/* --- 3 the balance ---------------------------------------------------------- */
 .bal { display: grid; gap: clamp(26px, 4vh, 50px); height: 100%; align-content: center; padding-top: var(--bar); }
 .bal__cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
 .bal__col h3 { font-family: var(--sc-font-text); font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; margin: 0 0 var(--sc-4); }
@@ -165,20 +170,42 @@ main { position: relative; z-index: 1; }
 .verdict { font-family: var(--sc-font-display); font-size: clamp(1.6rem, 3.2vw, 2.6rem); line-height: 1.1; letter-spacing: -.012em; max-width: 24ch; }
 .verdict em { font-style: italic; color: var(--ambar-lift); }
 
-/* --- 4 the phases ---------------------------------------------------------- */
-.phases { margin-top: clamp(40px, 6vh, 72px); }
-.phase {
-  display: grid; grid-template-columns: 4.2rem minmax(0, 15ch) minmax(0, 1fr);
-  gap: clamp(16px, 3vw, 48px); align-items: start;
-  padding-block: clamp(24px, 3.4vh, 40px); border-top: 1px solid var(--hair);
+/* --- 4 the phases, as cards. Orientación is the one to start on. ---------- */
+.tiers {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 1.8vw, 26px); align-items: stretch;
+  margin-top: clamp(40px, 6vh, 72px);
 }
-.phase:last-child { border-bottom: 1px solid var(--hair); }
-.phase__n { font-family: var(--sc-font-display); font-size: clamp(2rem, 3.2vw, 2.8rem); line-height: 1; color: var(--ambar-lift); margin: 0; }
-.phase__t { font-size: clamp(1.2rem, 2vw, 1.55rem); line-height: 1.2; color: var(--sc-ink); margin: 0; }
-.phase__d { font-size: clamp(1.02rem, 1.4vw, 1.18rem); line-height: 1.55; color: var(--sc-ink-soft); text-wrap: pretty; margin: 0; }
+.tier {
+  position: relative; border: 1px solid var(--hair); border-radius: 16px;
+  padding: clamp(20px, 2vw, 28px);
+  background: rgba(244, 239, 229, .025);
+  display: flex; flex-direction: column; gap: var(--sc-4);
+}
+.tier--hi {
+  border-color: var(--ambar); background: rgba(201, 122, 74, .09);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+}
+.tier__badge {
+  position: absolute; top: -11px; left: clamp(20px, 2vw, 28px);
+  background: var(--ambar); color: var(--tinta);
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: var(--sc-r-pill);
+}
+.tier__n { font-family: var(--sc-font-display); font-size: clamp(1.8rem, 2.6vw, 2.4rem); line-height: 1; color: var(--ambar-lift); margin: 0; }
+.tier__t { font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.2; color: var(--sc-ink); margin: 0; }
+.tier__d { font-size: .98rem; line-height: 1.5; color: var(--sc-ink-soft); margin: 0; }
+.tier ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sc-3); }
+.tier li { display: grid; grid-template-columns: 17px 1fr; gap: 10px; align-items: start; font-size: .97rem; line-height: 1.42; color: var(--sc-ink); }
+.tier li svg { width: 17px; height: 17px; margin-top: 2px; }
+.tier li svg circle { fill: rgba(244, 239, 229, .12); }
+.tier--hi li svg circle { fill: rgba(224, 162, 114, .28); }
+.tier li svg path { stroke: var(--sc-ink); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.tier .cta { align-self: start; margin-top: auto; padding: 12px 22px; font-size: .95rem; }
+.tier__note { font-size: .9rem; color: var(--sc-ink-soft); margin: auto 0 0; }
 
 /* --- 5 close --------------------------------------------------------------- */
-.close { display: flex; flex-direction: column; justify-content: center; gap: clamp(20px, 2.8vh, 36px); min-height: 74vh; padding-block: clamp(72px, 12vh, 140px) clamp(40px, 6vh, 72px); }
+.close { display: flex; flex-direction: column; justify-content: center; gap: clamp(20px, 2.8vh, 36px); min-height: 68vh; padding-block: clamp(72px, 12vh, 140px) clamp(40px, 6vh, 72px); }
 
 /* --- footer ---------------------------------------------------------------- */
 .foot { border-top: 1px solid var(--hair); padding-block: clamp(40px, 6vh, 72px) clamp(28px, 4vh, 44px); }
@@ -200,19 +227,19 @@ main { position: relative; z-index: 1; }
 .lang button[aria-pressed="true"] { color: var(--sc-ink); font-weight: 600; background: rgba(244, 239, 229, .08); }
 .lang button:focus-visible { outline: 2px solid var(--ambar-lift); outline-offset: 2px; }
 
+/* --- tablet ---------------------------------------------------------------- */
+@media (max-width: 1099px) { .tiers { gap: 18px; } }
 /* --- phone ----------------------------------------------------------------- */
 @media (max-width: 860px) {
-  :root { --bar: 60px; }
+  :root { --bar: 60px; --lane: 118px; }
   .bar__nav { display: none; }
   .bar .cta { margin-left: auto; }
-  .can, .bal__cols { grid-template-columns: 1fr; }
+  .can, .bal__cols, .tiers { grid-template-columns: 1fr; }
   .bal__cols { gap: clamp(22px, 3.6vh, 38px); }
-  .phase { grid-template-columns: 2.9rem 1fr; }
-  .phase__d { grid-column: 2; margin-top: var(--sc-3); }
+  .tiers { gap: 22px; }
   .foot__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot__grid > :first-child { grid-column: 1 / -1; }
   .dot { width: 54px; margin: -27px; }
-  .hero__in { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .dot, .dot .st { transition: none; }
@@ -223,8 +250,7 @@ main { position: relative; z-index: 1; }
 
 <span data-sc-progress></span>
 
-<svg class="spine" id="spine" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-  <path class="spine__wash" id="wash" d=""></path>
+<svg class="spine" id="spine" aria-hidden="true">
   <path class="spine__ghost" id="ghost" d=""></path>
   <path class="spine__line" id="line" d=""></path>
 </svg>
@@ -259,8 +285,9 @@ main { position: relative; z-index: 1; }
 
 <main id="top">
 
-  <!-- 1 · INVITATION · pin -->
-  <section data-sc-act="pin" data-sc-span="1.2" aria-label="Otto Intelligence">
+  <!-- 1 · ribbon LEFT · black ground · column right -->
+  <section class="sec sec--dark sec--ribL" data-sc-act="pin" data-sc-span="1.2" aria-label="Otto Intelligence">
+    <div class="sec__ground" aria-hidden="true"></div>
     <div data-sc-stage>
       <div class="wrap hero">
         <div class="hero__in" data-sc-cue="0 1 0 0.22">
@@ -281,9 +308,10 @@ main { position: relative; z-index: 1; }
     </div>
   </section>
 
-  <!-- 2 · THE INVITATION TO EXPLORE · flow -->
-  <section id="posible" data-sc-act="flow" aria-label="Lo que ya es posible">
-    <div class="wrap" style="padding-block: clamp(28px,4vh,56px) clamp(72px,11vh,150px)">
+  <!-- 2 · ribbon RIGHT · grey ground · column left -->
+  <section id="posible" class="sec sec--light sec--ribR" data-sc-act="flow" aria-label="Lo que ya es posible">
+    <div class="sec__ground" aria-hidden="true"></div>
+    <div class="wrap" style="padding-block: clamp(40px,6vh,90px) clamp(72px,11vh,150px)">
       <div data-sc-in data-sc-stagger="70">
         <p class="eyebrow" data-es="Lo posible" data-en="What is possible">Lo posible</p>
         <h2 class="h2" style="margin-top:var(--sc-5)"
@@ -308,8 +336,9 @@ main { position: relative; z-index: 1; }
     </div>
   </section>
 
-  <!-- 3 · THE BALANCE · pin. The peak, and where the dot crosses fields. -->
-  <section id="equilibrio" data-sc-act="pin" data-sc-span="3.4" aria-label="El equilibrio">
+  <!-- 3 · ribbon LEFT · black ground · column right -->
+  <section id="equilibrio" class="sec sec--dark sec--ribL" data-sc-act="pin" data-sc-span="3.2" aria-label="El equilibrio">
+    <div class="sec__ground" aria-hidden="true"></div>
     <div data-sc-stage>
       <div class="wrap bal">
         <div data-sc-cue="0 0.32 0">
@@ -347,8 +376,9 @@ main { position: relative; z-index: 1; }
     </div>
   </section>
 
-  <!-- 4 · HOW WE WORK · flow. Four phases, no prices. -->
-  <section id="fases" data-sc-act="flow" aria-label="Cómo trabajamos">
+  <!-- 4 · ribbon RIGHT · grey ground · column left · the phases -->
+  <section id="fases" class="sec sec--light sec--ribR" data-sc-act="flow" aria-label="Cómo trabajamos">
+    <div class="sec__ground" aria-hidden="true"></div>
     <div class="wrap" style="padding-block: clamp(56px,9vh,120px) clamp(56px,9vh,120px)">
       <div data-sc-in data-sc-stagger="70">
         <p class="eyebrow" data-es="Cómo trabajamos" data-en="How we work">Cómo trabajamos</p>
@@ -359,97 +389,126 @@ main { position: relative; z-index: 1; }
            data-es="Nadie debería firmar un proyecto grande para averiguar si sirve. Se avanza una fase a la vez, y cada una termina con algo que puedes usar aunque decidas no seguir."
            data-en="Nobody should sign a big project to find out whether it works. One phase at a time, and each ends with something you can use even if you decide to stop.">Nadie debería firmar un proyecto grande para averiguar si sirve. Se avanza una fase a la vez, y cada una termina con algo que puedes usar aunque decidas no seguir.</p>
       </div>
-      <div class="phases" data-sc-in data-sc-stagger="70">
-        <div class="phase">
-          <p class="phase__n">00</p>
-          <p class="phase__t" data-es="Orientación" data-en="Orientation">Orientación</p>
-          <p class="phase__d"
-             data-es="Una sesión. Un flujo concreto, o el negocio completo cuando la pregunta es dónde entra la IA. Sales con claridad sobre el cuello de botella, no con una propuesta."
-             data-en="One session. Either a single workflow, or the whole business when the question is where AI fits at all. You leave with clarity about the bottleneck, not with a proposal.">Una sesión. Un flujo concreto, o el negocio completo cuando la pregunta es dónde entra la IA. Sales con claridad sobre el cuello de botella, no con una propuesta.</p>
-        </div>
-        <div class="phase">
-          <p class="phase__n">01</p>
-          <p class="phase__t" data-es="Diagnóstico" data-en="Diagnosis">Diagnóstico</p>
-          <p class="phase__d"
-             data-es="Mapa de fuentes y de flujo. Qué información existe, dónde vive, quién la toca, y qué se puede mover sin romper nada. Termina con una recomendación de alcance."
-             data-en="A map of sources and flow. What information exists, where it lives, who touches it, and what can move without breaking anything. It ends with a scope recommendation.">Mapa de fuentes y de flujo. Qué información existe, dónde vive, quién la toca, y qué se puede mover sin romper nada. Termina con una recomendación de alcance.</p>
-        </div>
-        <div class="phase">
-          <p class="phase__n">02</p>
-          <p class="phase__t" data-es="Implementación" data-en="Implementation">Implementación</p>
-          <p class="phase__d"
-             data-es="Se construye lo más pequeño que resuelve de verdad. Con dueño, con validación, con un camino de respaldo para cuando falle, y probado contra casos reales tuyos."
-             data-en="We build the smallest thing that genuinely solves it. With an owner, with validation, with a fallback path for when it fails, tested against your own real cases.">Se construye lo más pequeño que resuelve de verdad. Con dueño, con validación, con un camino de respaldo para cuando falle, y probado contra casos reales tuyos.</p>
-        </div>
-        <div class="phase">
-          <p class="phase__n">03</p>
-          <p class="phase__t" data-es="Gobernanza" data-en="Governance">Gobernanza</p>
-          <p class="phase__d"
-             data-es="Alguien de tu equipo lo opera cuando nosotros ya no estemos. Entrenamiento, reglas de revisión y ajustes cuando el negocio cambie. Se cotiza aparte, y sólo si hace falta."
-             data-en="Somebody on your team runs it once we are gone. Training, review rules, and adjustments when the business changes. Quoted separately, and only if it is needed.">Alguien de tu equipo lo opera cuando nosotros ya no estemos. Entrenamiento, reglas de revisión y ajustes cuando el negocio cambie. Se cotiza aparte, y sólo si hace falta.</p>
-        </div>
+
+      <div class="tiers" data-sc-in data-sc-stagger="70">
+        <article class="tier tier--hi">
+          <span class="tier__badge" data-es="Empieza aquí" data-en="Start here">Empieza aquí</span>
+          <p class="tier__n">00</p>
+          <p class="tier__t" data-es="Orientación" data-en="Orientation">Orientación</p>
+          <p class="tier__d" data-es="Una sesión contigo. Es la puerta de entrada, y muchas veces es lo único que hace falta." data-en="One session with you. It is the way in, and often it is all that is needed.">Una sesión contigo. Es la puerta de entrada, y muchas veces es lo único que hace falta.</p>
+          <ul>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Un flujo concreto, o el negocio completo" data-en="One workflow, or the whole business">Un flujo concreto, o el negocio completo</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Nombramos el cuello de botella real" data-en="We name the actual bottleneck">Nombramos el cuello de botella real</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Sales con claridad, no con una propuesta" data-en="You leave with clarity, not a proposal">Sales con claridad, no con una propuesta</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Memo escrito si lo quieres por escrito" data-en="A written memo if you want it on paper">Memo escrito si lo quieres por escrito</span></li>
+          </ul>
+          <a class="cta" href="mailto:contact@otto-intel.com?subject=Otto%20Intel"
+             data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
+        </article>
+
+        <article class="tier">
+          <p class="tier__n">01</p>
+          <p class="tier__t" data-es="Diagnóstico" data-en="Diagnosis">Diagnóstico</p>
+          <p class="tier__d" data-es="Antes de construir nada, saber qué hay." data-en="Before building anything, know what is there.">Antes de construir nada, saber qué hay.</p>
+          <ul>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Mapa de fuentes y de flujo" data-en="A map of sources and flow">Mapa de fuentes y de flujo</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Qué información existe y dónde vive" data-en="What information exists and where it lives">Qué información existe y dónde vive</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Qué se puede mover sin romper nada" data-en="What can move without breaking anything">Qué se puede mover sin romper nada</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Recomendación de alcance" data-en="A scope recommendation">Recomendación de alcance</span></li>
+          </ul>
+          <p class="tier__note" data-es="Se cotiza según el tamaño." data-en="Quoted by size.">Se cotiza según el tamaño.</p>
+        </article>
+
+        <article class="tier">
+          <p class="tier__n">02</p>
+          <p class="tier__t" data-es="Implementación" data-en="Implementation">Implementación</p>
+          <p class="tier__d" data-es="Lo más pequeño que resuelve de verdad." data-en="The smallest thing that genuinely solves it.">Lo más pequeño que resuelve de verdad.</p>
+          <ul>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Con dueño y con validación" data-en="With an owner and with validation">Con dueño y con validación</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Camino de respaldo para cuando falle" data-en="A fallback path for when it fails">Camino de respaldo para cuando falle</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Probado contra casos reales tuyos" data-en="Tested against your own real cases">Probado contra casos reales tuyos</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Entrega y traspaso de propiedad" data-en="Delivery and ownership transfer">Entrega y traspaso de propiedad</span></li>
+          </ul>
+          <p class="tier__note" data-es="Se cotiza según el alcance." data-en="Quoted by scope.">Se cotiza según el alcance.</p>
+        </article>
+
+        <article class="tier">
+          <p class="tier__n">03</p>
+          <p class="tier__t" data-es="Gobernanza" data-en="Governance">Gobernanza</p>
+          <p class="tier__d" data-es="Para que siga funcionando cuando ya no estemos." data-en="So it keeps working once we are gone.">Para que siga funcionando cuando ya no estemos.</p>
+          <ul>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Entrenamiento de quien lo va a operar" data-en="Training for whoever will run it">Entrenamiento de quien lo va a operar</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Reglas de revisión y de escalamiento" data-en="Review and escalation rules">Reglas de revisión y de escalamiento</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Ajustes cuando el negocio cambie" data-en="Adjustments when the business changes">Ajustes cuando el negocio cambie</span></li>
+            <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10"></circle><path d="M6 10.4l2.6 2.6L14 7.6"></path></svg><span data-es="Opcional, y sólo si hace falta" data-en="Optional, and only if it is needed">Opcional, y sólo si hace falta</span></li>
+          </ul>
+          <p class="tier__note" data-es="Mensual, se cotiza aparte." data-en="Monthly, quoted separately.">Mensual, se cotiza aparte.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- 5 · CLOSE + FOOTER · flow. Last element on the page. -->
-  <section id="hablemos" data-sc-act="flow" aria-label="Hablemos">
-    <div class="wrap close" data-sc-in data-sc-stagger="80">
-      <p class="eyebrow" data-es="Empecemos" data-en="Let us start">Empecemos</p>
-      <h2 class="h2"
-          data-es="Una hora, tu flujo más molesto, y una respuesta honesta."
-          data-en="One hour, your most annoying workflow, and an honest answer.">Una hora, tu flujo más molesto, y una respuesta honesta.</h2>
-      <p class="lede"
-         data-es="A veces la respuesta es que no hace falta IA. Esa también sirve, y sale mucho más barata que descubrirlo a la mitad de un proyecto."
-         data-en="Sometimes the answer is that you do not need AI. That answer counts too, and it is far cheaper than finding out halfway through a project.">A veces la respuesta es que no hace falta IA. Esa también sirve, y sale mucho más barata que descubrirlo a la mitad de un proyecto.</p>
-      <div class="actions">
-        <a class="cta" href="mailto:contact@otto-intel.com?subject=Otto%20Intel"
-           data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
-        <a class="ghost" href="mailto:contact@otto-intel.com">contact@otto-intel.com</a>
+  <!-- 5 · ribbon LEFT · black ground · column right · close and footer -->
+  <section id="hablemos" class="sec sec--dark sec--ribL" data-sc-act="flow" aria-label="Hablemos">
+    <div class="sec__ground" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="close" data-sc-in data-sc-stagger="80">
+        <p class="eyebrow" data-es="Empecemos" data-en="Let us start">Empecemos</p>
+        <h2 class="h2"
+            data-es="Una hora, tu flujo más molesto, y una respuesta honesta."
+            data-en="One hour, your most annoying workflow, and an honest answer.">Una hora, tu flujo más molesto, y una respuesta honesta.</h2>
+        <p class="lede"
+           data-es="A veces la respuesta es que no hace falta IA. Esa también sirve, y sale mucho más barata que descubrirlo a la mitad de un proyecto."
+           data-en="Sometimes the answer is that you do not need AI. That answer counts too, and it is far cheaper than finding out halfway through a project.">A veces la respuesta es que no hace falta IA. Esa también sirve, y sale mucho más barata que descubrirlo a la mitad de un proyecto.</p>
+        <div class="actions">
+          <a class="cta" href="mailto:contact@otto-intel.com?subject=Otto%20Intel"
+             data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
+          <a class="ghost" href="mailto:contact@otto-intel.com">contact@otto-intel.com</a>
+        </div>
       </div>
-    </div>
 
-    <footer class="wrap foot">
-      <div class="foot__grid">
-        <div>
-          <span class="wordmark"><span>OttO</span><span class="i">INTELLIGENCE</span></span>
-          <p class="foot__blurb"
-             data-es="Sistemas de IA que tu equipo puede operar. Puerto Vallarta, trabajando en español y en inglés."
-             data-en="AI systems your team can actually run. Puerto Vallarta, working in Spanish and English.">Sistemas de IA que tu equipo puede operar. Puerto Vallarta, trabajando en español y en inglés.</p>
+      <footer class="foot">
+        <div class="foot__grid">
+          <div>
+            <span class="wordmark"><span>OttO</span><span class="i">INTELLIGENCE</span></span>
+            <p class="foot__blurb"
+               data-es="Sistemas de IA que tu equipo puede operar. Puerto Vallarta, trabajando en español y en inglés."
+               data-en="AI systems your team can actually run. Puerto Vallarta, working in Spanish and English.">Sistemas de IA que tu equipo puede operar. Puerto Vallarta, trabajando en español y en inglés.</p>
+          </div>
+          <div>
+            <h4 data-es="El sitio" data-en="This site">El sitio</h4>
+            <ul>
+              <li><a href="#posible" data-es="Lo posible" data-en="What is possible">Lo posible</a></li>
+              <li><a href="#equilibrio" data-es="El equilibrio" data-en="The balance">El equilibrio</a></li>
+              <li><a href="#fases" data-es="Cómo trabajamos" data-en="How we work">Cómo trabajamos</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 data-es="Las fases" data-en="The phases">Las fases</h4>
+            <ul>
+              <li><a href="#fases" data-es="Orientación" data-en="Orientation">Orientación</a></li>
+              <li><a href="#fases" data-es="Diagnóstico" data-en="Diagnosis">Diagnóstico</a></li>
+              <li><a href="#fases" data-es="Implementación" data-en="Implementation">Implementación</a></li>
+              <li><a href="#fases" data-es="Gobernanza" data-en="Governance">Gobernanza</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 data-es="Contacto" data-en="Contact">Contacto</h4>
+            <ul>
+              <li><a href="mailto:contact@otto-intel.com">contact@otto-intel.com</a></li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 data-es="El sitio" data-en="This site">El sitio</h4>
-          <ul>
-            <li><a href="#posible" data-es="Lo posible" data-en="What is possible">Lo posible</a></li>
-            <li><a href="#equilibrio" data-es="El equilibrio" data-en="The balance">El equilibrio</a></li>
-            <li><a href="#fases" data-es="Cómo trabajamos" data-en="How we work">Cómo trabajamos</a></li>
-          </ul>
+        <div class="foot__base">
+          <span>© 2026 OttO Intelligence</span>
+          <span data-es="te mira · entiende · trabaja por ti" data-en="observes · understands · works for you">te mira · entiende · trabaja por ti</span>
+          <div class="lang">
+            <button type="button" data-lang="es" aria-pressed="true">ES</button>
+            <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
         </div>
-        <div>
-          <h4 data-es="Las fases" data-en="The phases">Las fases</h4>
-          <ul>
-            <li><a href="#fases" data-es="Orientación" data-en="Orientation">Orientación</a></li>
-            <li><a href="#fases" data-es="Diagnóstico" data-en="Diagnosis">Diagnóstico</a></li>
-            <li><a href="#fases" data-es="Implementación" data-en="Implementation">Implementación</a></li>
-            <li><a href="#fases" data-es="Gobernanza" data-en="Governance">Gobernanza</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 data-es="Contacto" data-en="Contact">Contacto</h4>
-          <ul>
-            <li><a href="mailto:contact@otto-intel.com">contact@otto-intel.com</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="foot__base">
-        <span>© 2026 OttO Intelligence</span>
-        <span data-es="te mira · entiende · trabaja por ti" data-en="observes · understands · works for you">te mira · entiende · trabaja por ti</span>
-        <div class="lang">
-          <button type="button" data-lang="es" aria-pressed="true">ES</button>
-          <button type="button" data-lang="en" aria-pressed="false">EN</button>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </div>
   </section>
 
 </main>
@@ -461,81 +520,113 @@ main { position: relative; z-index: 1; }
   var root = document.documentElement;
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var line  = document.getElementById('line');
-  var ghost = document.getElementById('ghost');
-  var wash  = document.getElementById('wash');
-  var dot   = document.getElementById('dot');
+  var svg  = document.getElementById('spine');
+  var line = document.getElementById('line');
+  var ghost= document.getElementById('ghost');
+  var dot  = document.getElementById('dot');
+  var secs = [].slice.call(document.querySelectorAll('main > .sec'));
 
   /* ---------------------------------------------------------------------
-     THE SPINE. One S drawn across the whole scroll, authored in the
-     viewBox's own 1000x1000 space so it stretches with the window. The
-     ghost is the part not yet drawn, so the line never appears to come
-     from nowhere, and the wash is the light field the curve carries.
+     THE CURVE. Authored in real document pixels, not in a stretched
+     viewBox, so the swing is the same shape at every width. One waypoint
+     per section, alternating sides: the curve crosses the page exactly
+     where the ground changes, which is what ties the two together.
   --------------------------------------------------------------------- */
-  var len = 0;
+  var SAMPLES = 700, ys = [], xs = [], ls = [], len = 0;
+
   function shape() {
-    // The lane the ribbon may occupy, in the viewBox's own 0-1000 space. It is
-    // narrower on a phone so the curve never crosses the reading column.
-    var a = innerWidth < 860 ? 830 : 745;   // leftmost the curve may reach
-    var b = innerWidth < 860 ? 995 : 975;   // rightmost
-    var mid = (a + b) / 2, sw = (b - a);
-    var d = 'M ' + b + ' -40'
-          + ' C ' + (a - sw * 0.5) + ' 190, ' + (b + sw * 0.4) + ' 380, ' + mid + ' 545'
-          + ' C ' + (a - sw * 0.6) + ' 700, ' + (b + sw * 0.3) + ' 890, ' + (mid - sw * 0.2) + ' 1060';
+    var W = document.documentElement.clientWidth;
+    var H = document.body.scrollHeight;
+    var swing = W >= 1100;
+    var inset = swing ? Math.max(64, Math.min(W * 0.13, 190))
+                      : Math.min(96, Math.max(46, W * 0.08));
+    var L = swing ? inset : (W - inset);
+    var R = W - inset;
+
+    svg.setAttribute('width', W);
+    svg.setAttribute('height', H);
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+
+    var SWING = Math.min(150, Math.max(90, H * 0.018));   // the crossing band
+    var pts = [];
+    secs.forEach(function (s) {
+      var r = s.getBoundingClientRect();
+      var top = r.top + scrollY, bot = r.bottom + scrollY;
+      var x = (swing && s.classList.contains('sec--ribL')) ? L : R;
+      var pad = Math.min(SWING, (bot - top) * 0.34);
+      pts.push({ x: x, y: top + pad });
+      pts.push({ x: x, y: bot - pad });
+    });
+    pts.unshift({ x: pts[0].x, y: -140 });
+    pts.push({ x: pts[pts.length - 1].x, y: H + 140 });
+
+    var d = 'M ' + pts[0].x + ' ' + pts[0].y;
+    for (var i = 1; i < pts.length; i++) {
+      var a = pts[i - 1], b = pts[i];
+      if (a.x === b.x) { d += ' L ' + b.x + ' ' + b.y; continue; }   // hold the lane
+      var k = (b.y - a.y) * 0.5;
+      d += ' C ' + a.x + ' ' + (a.y + k) + ', ' + b.x + ' ' + (b.y - k) + ', ' + b.x + ' ' + b.y;
+    }
     line.setAttribute('d', d);
     ghost.setAttribute('d', d);
-    wash.setAttribute('d', d + ' L 1060 1060 L 1060 -40 Z');
+
     len = line.getTotalLength();
     line.style.setProperty('--len', len);
-    line.style.setProperty('--off', len);
+    ys = []; xs = []; ls = [];
+    for (var j = 0; j <= SAMPLES; j++) {
+      var t = len * j / SAMPLES, p = line.getPointAtLength(t);
+      ys.push(p.y); xs.push(p.x); ls.push(t);
+    }
   }
-  shape();
-  addEventListener('resize', shape, { passive: true });
+
+  /* x on the curve at a given document y, from the sample table. The curve is
+     monotonic in y, so a binary search is exact enough and costs nothing. */
+  function at(y) {
+    if (!ys.length) return { x: 0, l: 0 };
+    if (y <= ys[0]) return { x: xs[0], l: ls[0] };
+    if (y >= ys[ys.length - 1]) return { x: xs[xs.length - 1], l: ls[ls.length - 1] };
+    var lo = 0, hi = ys.length - 1;
+    while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (ys[mid] < y) lo = mid; else hi = mid; }
+    var span = ys[hi] - ys[lo] || 1, f = (y - ys[lo]) / span;
+    return { x: xs[lo] + (xs[hi] - xs[lo]) * f, l: ls[lo] + (ls[hi] - ls[lo]) * f };
+  }
 
   /* ---------------------------------------------------------------------
-     THE DOT. The mark is not a logo parked in a corner: it is the dot in
-     the taijitu, and it walks the boundary. Papel disc with Tinta strokes
-     through the first half, then it crosses and inverts, which is the same
-     move as the light dot sitting inside the dark field.
+     THE DOT. Held at the middle of the viewport and pushed sideways by the
+     curve, so scrolling swings the mark from one side to the other. It
+     inverts on every crossing: Papel on the black field, Tinta on the grey
+     one. That is the taijitu dot, and it is the whole signature.
   --------------------------------------------------------------------- */
-  var mx = 0.5, my = 0.5, flipped = false, started = false;
-  var cx = 0, cy = 0;
-
-  if (!reduced && matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    addEventListener('pointermove', function (e) {
-      mx = e.clientX / innerWidth; my = e.clientY / innerHeight;
-    }, { passive: true });
-  }
+  var cx = 0, started = false, flipped = null;
 
   function frame() {
-    var max = Math.max(1, document.body.scrollHeight - innerHeight);
-    var p = Math.min(1, Math.max(0, scrollY / max));
-    root.style.setProperty('--page', p.toFixed(4));
+    var vh = innerHeight, mid = scrollY + vh * 0.5;
+    var s = at(mid);
 
-    line.style.setProperty('--off', (len * (1 - p)).toFixed(1));
+    if (!started) { cx = s.x; started = true; }
+    cx += (s.x - cx) * (reduced ? 1 : 0.14);
+    dot.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + (vh * 0.5).toFixed(1) + 'px,0)';
+    line.style.setProperty('--off', (len - s.l).toFixed(1));
 
-    var m = line.getScreenCTM();
-    if (m) {
-      var pt = line.getPointAtLength(len * p);
-      var tx = pt.x * m.a + pt.y * m.c + m.e;
-      var ty = pt.x * m.b + pt.y * m.d + m.f;
-      if (!reduced) { tx += (mx - 0.5) * 18; ty += (my - 0.5) * 10; }
-      if (!started) { cx = tx; cy = ty; started = true; }
-      cx += (tx - cx) * (reduced ? 1 : 0.16);
-      cy += (ty - cy) * (reduced ? 1 : 0.22);
-      dot.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + cy.toFixed(1) + 'px,0)';
+    /* which field are we in: the section under the middle of the screen */
+    var light = false;
+    for (var i = 0; i < secs.length; i++) {
+      var r = secs[i].getBoundingClientRect();
+      if (r.top <= vh * 0.5 && r.bottom >= vh * 0.5) { light = secs[i].classList.contains('sec--light'); break; }
     }
-
-    var should = p > 0.46;
-    if (should !== flipped) { flipped = should; dot.classList.toggle('dot--flip', should); }
+    if (light !== flipped) { flipped = light; dot.classList.toggle('dot--flip', light); }
 
     requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
 
-  /* --- bilingual. Spanish default, carried over from the live site. Line
-     splitting measures real line boxes, so a language change drops the
-     split and relays out, exactly as the engine does on fonts.ready. */
+  shape();
+  requestAnimationFrame(frame);
+  addEventListener('resize', shape, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(shape);
+  // the engine sets pinned-act heights on layout, so re-measure after it settles
+  setTimeout(shape, 60); setTimeout(shape, 400);
+
+  /* --- bilingual. Spanish default, carried over from the live site. --- */
   var buttons = [].slice.call(document.querySelectorAll('.lang button'));
   function setLang(lang) {
     root.lang = lang;
@@ -547,10 +638,9 @@ main { position: relative; z-index: 1; }
       a.cues.forEach(function (q) { if (q.kinetic) { q.el.__scSplit = null; q.units = null; } });
     });
     api.layout();
+    shape();
   }
-  buttons.forEach(function (b) {
-    b.addEventListener('click', function () { setLang(b.dataset.lang); });
-  });
+  buttons.forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.lang); }); });
 })();
 </script>
 </body>
