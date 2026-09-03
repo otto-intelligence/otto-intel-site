@@ -50,11 +50,9 @@ body { background: var(--black); color: var(--sc-ink); }
 
 /* --- the ribbon: absolute, the height of the whole document ---------------- */
 .spine { position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none; }
-.spine__ghost { fill: none; stroke: var(--papel); stroke-width: 1; opacity: .12; }
-.spine__line {
-  fill: none; stroke: var(--ambar-lift); stroke-width: 1.8; stroke-linecap: round;
-  stroke-dasharray: var(--len); stroke-dashoffset: var(--off); opacity: .92;
-}
+/* The path stays in the DOM because the dot's position is measured from it,
+   but nothing about it is drawn: no trail, no guide. */
+.spine__ghost, .spine__line { fill: none; stroke: none; }
 
 /* --- the dot -------------------------------------------------------------- */
 .dot {
@@ -65,7 +63,9 @@ body { background: var(--black); color: var(--sc-ink); }
   background: var(--papel);
   box-shadow: 0 14px 40px rgba(0,0,0,.6), inset 0 0 0 1px rgba(26,26,23,.10);
   transition: background 600ms var(--sc-ease-out), box-shadow 600ms var(--sc-ease-out);
+  will-change: transform, border-radius;
 }
+/* the glasses are counter-scaled so the drop stretches but the mark does not */
 .dot svg { width: 62%; height: auto; overflow: visible; }
 .dot .st { stroke: var(--tinta); transition: stroke 600ms var(--sc-ease-out); }
 .dot--flip { background: var(--tinta); box-shadow: 0 14px 40px rgba(0,0,0,.7), inset 0 0 0 1.5px var(--ambar); }
@@ -161,19 +161,29 @@ main { position: relative; z-index: 0; }
 
 /* --- 3 the balance. One taijitu, and the copy arranged around it. --------- */
 .yy {
-  position: relative; height: 100%;
+  position: relative; min-height: 100vh; overflow: clip;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: auto minmax(0, 1fr) auto;
   align-content: center; row-gap: clamp(14px, 2.4vh, 34px);
-  padding-top: var(--bar); padding-bottom: clamp(16px, 3vh, 40px);
+  padding-top: calc(var(--bar) + clamp(40px, 7vh, 96px));
+  padding-bottom: clamp(48px, 9vh, 110px);
 }
+/* Centred with inset+margin rather than a translate, because the rotation and
+   the centring cannot then share one transform declaration: an invalid --spin
+   was killing the whole property and dropping the symbol half a box low. */
 .yy__sym {
-  position: absolute; left: 50%; top: 50%; z-index: 0;
-  width: min(100%, 78vh); aspect-ratio: 1; height: auto;
-  transform: translate(-50%, -50%) rotate(var(--spin, 0deg));
+  position: absolute; top: 0; bottom: 0; margin: auto; z-index: 0;
+  left: clamp(20px, 5vw, 64px); right: clamp(20px, 5vw, 64px);
+  width: min(88%, 62vh); aspect-ratio: 1; height: auto;
+  transform: rotate(var(--spin, 0deg));
   transform-origin: center;
 }
+/* an abspos child is laid out against the padding box, so the symbol has to be
+   inset by the ribbon's lane by hand or it centres on the wrong box and the
+   copy stops sitting inside its lobes */
+@media (min-width: 1100px) { .sec--ribL .yy__sym { left: var(--lane); } }
+@media (max-width: 1099px) { .yy__sym { right: var(--lane); } }
 .yy > :not(.yy__sym) { position: relative; z-index: 1; }
 .yy__head { grid-column: 1 / 9; grid-row: 1; }
 .yy__side { align-self: center; }
@@ -272,7 +282,7 @@ main { position: relative; z-index: 0; }
   .yy__head, .yy__side--m, .yy__side--y, .verdict { grid-column: 1; }
   .yy__head { grid-row: 1; } .yy__side--m { grid-row: 2; } .yy__side--y { grid-row: 3; text-align: left; align-self: start; }
   .verdict { grid-row: 4; justify-self: start; text-align: left; }
-  .yy__sym { width: min(120%, 58vh); opacity: .5; }
+  .yy__sym { width: min(116%, 52vh); opacity: .5; }
   .tiers { gap: 22px; }
   .foot__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot__grid > :first-child { grid-column: 1 / -1; }
@@ -375,10 +385,9 @@ main { position: relative; z-index: 0; }
 
   <!-- 3 · ribbon LEFT · black ground · the taijitu. Copy sits around the
        symbol rather than in three stacked bands. -->
-  <section id="equilibrio" class="sec sec--dark sec--ribL" data-sc-act="pin" data-sc-span="3.2" aria-label="El equilibrio">
+  <section id="equilibrio" class="sec sec--dark sec--ribL" data-sc-act="flow" aria-label="El equilibrio">
     <div class="sec__ground" aria-hidden="true"></div>
-    <div data-sc-stage>
-      <div class="wrap yy">
+    <div class="wrap yy" data-sc-in data-sc-stagger="90">
 
         <svg class="yy__sym" id="yin" viewBox="0 0 200 200" aria-hidden="true">
           <circle cx="100" cy="100" r="100" fill="var(--grey)"></circle>
@@ -392,7 +401,7 @@ main { position: relative; z-index: 0; }
             <path d="M 109 39 Q 160 31 211 39" stroke="var(--grey)" stroke-width="17" stroke-linecap="round" fill="none"></path>
             <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="var(--grey)" stroke-width="14" stroke-linecap="round" fill="none"></path>
           </g>
-          <g transform="translate(100 150) scale(0.115) translate(-160 -100)" opacity=".92">
+          <g transform="translate(100 150) rotate(180) scale(0.115) translate(-160 -100)" opacity=".92">
             <circle cx="70" cy="70" r="50" stroke="var(--black)" stroke-width="17" fill="none"></circle>
             <circle cx="250" cy="70" r="50" stroke="var(--black)" stroke-width="17" fill="none"></circle>
             <path d="M 109 39 Q 160 31 211 39" stroke="var(--black)" stroke-width="17" stroke-linecap="round" fill="none"></path>
@@ -400,14 +409,14 @@ main { position: relative; z-index: 0; }
           </g>
         </svg>
 
-        <div class="yy__head" data-sc-cue="0 0.34 0">
+        <div class="yy__head">
           <p class="eyebrow" data-es="El equilibrio" data-en="The balance">El equilibrio</p>
           <h2 class="h2" style="margin-top:var(--sc-5)"
               data-es="Un sistema bueno sabe qué le toca a cada quien."
               data-en="A good system knows what belongs to whom.">Un sistema bueno sabe qué le toca a cada quien.</h2>
         </div>
 
-        <div class="yy__side yy__side--m" data-sc-cue="0.22 0.86">
+        <div class="yy__side yy__side--m">
           <h3 data-es="La máquina" data-en="The machine">La máquina</h3>
           <ul>
             <li data-es="Repite sin cansarse" data-en="Repeats without tiring">Repite sin cansarse</li>
@@ -417,7 +426,7 @@ main { position: relative; z-index: 0; }
           </ul>
         </div>
 
-        <div class="yy__side yy__side--y" data-sc-cue="0.30 0.90">
+        <div class="yy__side yy__side--y">
           <h3 data-es="Tú" data-en="You">Tú</h3>
           <ul>
             <li data-es="Decides qué importa" data-en="Decide what matters">Decides qué importa</li>
@@ -427,11 +436,10 @@ main { position: relative; z-index: 0; }
           </ul>
         </div>
 
-        <p class="verdict" data-sc-cue="0.74 1 0.09 0"
+        <p class="verdict"
            data-es="No se trata de cuánta IA. Se trata de <em>dónde</em>, y de quién responde por ella."
            data-en="It is not about how much AI. It is about <em>where</em>, and who answers for it.">No se trata de cuánta IA. Se trata de <em>dónde</em>, y de quién responde por ella.</p>
 
-      </div>
     </div>
   </section>
 
@@ -606,15 +614,32 @@ main { position: relative; z-index: 0; }
     svg.setAttribute('height', H);
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
 
-    var SWING = Math.min(150, Math.max(90, H * 0.018));   // the crossing band
+    /* Waypoints sit just outside each section's real ink, so the whole swing
+       happens in the empty band between two sections rather than across
+       somebody's paragraph. Measured, not assumed: section heights change with
+       content and breakpoint, and a fixed band was landing on text as soon as
+       a section got shorter. A pinned section counts as ink from edge to edge,
+       because its stage stays on screen for the section's whole length. */
     var pts = [];
     secs.forEach(function (s) {
       var r = s.getBoundingClientRect();
       var top = r.top + scrollY, bot = r.bottom + scrollY;
       var x = (swing && s.classList.contains('sec--ribL')) ? L : R;
-      var pad = Math.min(SWING, (bot - top) * 0.34);
-      pts.push({ x: x, y: top + pad });
-      pts.push({ x: x, y: bot - pad });
+      var it = Infinity, ib = -Infinity;
+      if (s.querySelector('[data-sc-stage]')) { it = top; ib = bot; }
+      else {
+        s.querySelectorAll('p,h1,h2,h3,h4,li,a,span').forEach(function (e) {
+          if (!e.textContent.trim()) return;
+          var q = e.getBoundingClientRect();
+          if (!q.width || !q.height) return;
+          it = Math.min(it, q.top + scrollY); ib = Math.max(ib, q.bottom + scrollY);
+        });
+      }
+      if (!isFinite(it)) { it = top + 100; ib = bot - 100; }
+      var a = Math.min(Math.max(top + 4, it - 28), bot - 4);
+      var b = Math.max(Math.min(bot - 4, ib + 28), a + 4);
+      pts.push({ x: x, y: a });
+      pts.push({ x: x, y: b });
     });
     pts.unshift({ x: pts[0].x, y: -140 });
     pts.push({ x: pts[pts.length - 1].x, y: H + 140 });
@@ -656,16 +681,31 @@ main { position: relative; z-index: 0; }
      inverts on every crossing: Papel on the black field, Tinta on the grey
      one. That is the taijitu dot, and it is the whole signature.
   --------------------------------------------------------------------- */
-  var cx = 0, started = false, flipped = null;
+  var cx = 0, px = 0, started = false, flipped = null;
+  var glyph = dot.querySelector('svg');
 
   function frame() {
     var vh = innerHeight, mid = scrollY + vh * 0.5;
     var s = at(mid);
 
-    if (!started) { cx = s.x; started = true; }
+    if (!started) { cx = px = s.x; started = true; }
     cx += (s.x - cx) * (reduced ? 1 : 0.14);
-    dot.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + (vh * 0.5).toFixed(1) + 'px,0)';
-    line.style.setProperty('--off', (len - s.l).toFixed(1));
+
+    /* THE DROPLET. While it is crossing, the mark stretches into a teardrop
+       with the point trailing behind it, and it rounds back into a circle as
+       it settles on the far side. Speed drives the whole thing, so it is the
+       travel itself that deforms it rather than a keyframe. */
+    var vx = cx - px; px = cx;
+    var t = reduced ? 0 : Math.min(1, Math.abs(vx) / 22);
+    t = t * t * (3 - 2 * t);
+    var sx = 1 + 0.42 * t, sy = 1 - 0.24 * t;
+    var tail = (50 - 44 * t).toFixed(1) + '%';
+    dot.style.borderRadius = vx >= 0
+      ? tail + ' 50% 50% ' + tail + ' / 50% 50% 50% 50%'
+      : '50% ' + tail + ' ' + tail + ' 50% / 50% 50% 50% 50%';
+    dot.style.transform = 'translate3d(' + cx.toFixed(1) + 'px,' + (vh * 0.5).toFixed(1) + 'px,0)'
+                        + ' scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')';
+    if (glyph) glyph.style.transform = 'scale(' + (1 / sx).toFixed(3) + ',' + (1 / sy).toFixed(3) + ')';
 
     /* which field are we in: the section under the middle of the screen */
     var light = false;
