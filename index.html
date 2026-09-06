@@ -155,7 +155,7 @@ main { position: relative; z-index: 0; }
 .actions { display: flex; flex-wrap: wrap; gap: clamp(14px, 2vw, 28px); align-items: center; }
 
 /* --- 1 hero ---------------------------------------------------------------- */
-.hero { display: flex; align-items: center; height: 100%; padding-top: var(--bar); }
+.hero { display: flex; align-items: center; height: 100%; padding-top: var(--bar); position: relative; }
 .hero__in { display: flex; flex-direction: column; gap: clamp(16px, 2.2vh, 30px); }
 
 /* --- 2 what is already possible ------------------------------------------- */
@@ -296,6 +296,31 @@ main { position: relative; z-index: 0; }
 @media (prefers-reduced-motion: reduce) {
   .dot, .dot .st { transition: none; }
 }
+
+/* --- 1a hero: composition + pointer depth --------------------------------- */
+/* The headline sat mid-canvas with the right half empty, which reads as an
+   unfinished frame rather than a composed one. Hold the text in a real column
+   and let the spotlight own the space beside it. */
+.hero__in { max-width: 62ch; position: relative; z-index: 1; }
+.hero .h1 { max-width: 18ch; }
+.hero .eyebrow + .h1 { margin-top: clamp(18px, 2.4vh, 34px); }
+.hero .h1 + .lede { margin-top: clamp(22px, 3vh, 40px); }
+.hero .lede + .actions { margin-top: clamp(26px, 3.4vh, 44px); }
+
+/* Warm ground light that follows the pointer. --sc-mx/--sc-my are published by
+   the engine's spotlight, gated to fine pointers and off under reduced motion;
+   the 50%/38% fallback keeps a static wash when they never arrive. */
+.hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(
+    80ch 80ch at calc(var(--sc-mx, .5) * 100%) calc(var(--sc-my, .38) * 100%),
+    color-mix(in oklab, var(--ambar-lift) 10%, transparent) 0%,
+    color-mix(in oklab, var(--ambar-lift) 4%, transparent) 42%,
+    transparent 78%);
+  transition: opacity .5s ease;
+}
+@media (prefers-reduced-motion: reduce) { .hero::after { opacity: .5; } }
+@media (hover: none) { .hero::after { opacity: .45; } }
 </style>
 </head>
 <body>
@@ -338,7 +363,7 @@ main { position: relative; z-index: 0; }
 <main id="top">
 
   <!-- 1 · ribbon LEFT · black ground · column right -->
-  <section class="sec sec--dark sec--ribL" data-sc-act="pin" data-sc-span="1.2" aria-label="Otto Intelligence">
+  <section class="sec sec--dark sec--ribL" data-sc-act="pin" data-sc-span="1.2" data-sc-spotlight aria-label="Otto Intelligence">
     <div class="sec__ground" aria-hidden="true"></div>
     <div data-sc-stage>
       <div class="wrap hero">
@@ -352,6 +377,7 @@ main { position: relative; z-index: 0; }
              data-en="Otto designs and implements AI systems your team can actually run. We start by understanding how the business works, not by picking a tool.">Otto diseña e implementa sistemas de IA que tu equipo puede operar. Empezamos por entender cómo funciona el negocio, no por elegir la herramienta.</p>
           <div class="actions">
             <a class="cta" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
+               data-sc-magnet="0.28"
                data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
             <a class="ghost" href="#fases" data-es="Ver cómo trabajamos" data-en="See how we work">Ver cómo trabajamos</a>
           </div>
