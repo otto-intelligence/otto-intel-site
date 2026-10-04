@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OttO Intelligence — Sistemas de IA que tu equipo puede operar</title>
+<title>OttO Intelligence</title>
+<meta name="description" content="Soluciones para tu negocio. Sin humo. IA cuando es necesario.">
 <link rel="icon" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,18 +12,15 @@
 <style>
 :root{
   /* Canonical pairing from otto-intel-brand-spec.md: Tinta on Papel.
-     "White background; brand colors live in type and accents, never fills."
-     One accent per surface: Ámbar. Ocre/Óxido appear only as type. */
-  --papel:#F4EFE5;      /* primary bg      */
-  --bruma:#ECE6D9;      /* surface         */
-  --tinta:#1A1A17;      /* primary fg      */
-  --ambar:#C97A4A;      /* primary accent  */
-  --ocre:#B89752;       /* warm secondary  */
-  --oxido:#A04E2C;      /* deep            */
+     Ámbar is too light to carry text on Papel (2.88:1), so Óxido carries
+     every text accent and the CTA; Ámbar stays in hairlines and glow. */
+  --papel:#F4EFE5;
+  --tinta:#1A1A17;
+  --ambar:#C97A4A;
+  --ocre:#B89752;
+  --oxido:#A04E2C;
   --ink:var(--tinta);
-  --ink-soft:#5E5850;   /* Tinta at reading weight, AA on Papel */
-  --bar:64px;
-  --measure:62ch;
+  --ink-soft:#5E5850;   /* AA on Papel */
   --gut:clamp(20px,5vw,80px);
 }
 *{box-sizing:border-box}
@@ -33,182 +31,53 @@ body{
   font-size:clamp(15px,1.05vw,17px); line-height:1.6;
   -webkit-font-smoothing:antialiased; overflow-x:hidden;
 }
-h1,h2,h3{font-family:"Instrument Serif",Georgia,serif; font-weight:400;
-  letter-spacing:-.018em; line-height:1.02; margin:0; text-wrap:balance}
 p{margin:0; text-wrap:pretty}
 a{color:inherit}
-.wrap{width:min(1240px,100% - var(--gut)*2); margin-inline:auto}
-.eyebrow{font-family:Inter; font-size:11px; font-weight:600; letter-spacing:.2em;
-  text-transform:uppercase; color:var(--oxido); margin:0}
 
-/* ── nav ─────────────────────────────────────────────────────────── */
-.bar{position:fixed; inset:0 0 auto; height:var(--bar); z-index:50;
-  display:flex; align-items:center; backdrop-filter:blur(14px);
-  background:color-mix(in oklab,var(--papel) 86%,transparent);
-  border-bottom:1px solid color-mix(in oklab,var(--tinta) 12%,transparent)}
-.bar .wrap{display:flex; align-items:center; justify-content:space-between; gap:20px}
-.mark{display:flex; align-items:center; gap:9px; text-decoration:none; flex-shrink:0}
-.mark svg{width:30px; height:auto; display:block}
-.mark b{font-family:"DM Sans",sans-serif; font-weight:700; font-size:14px;
-  letter-spacing:.01em}
-.mark b span{font-weight:400; letter-spacing:.06em; opacity:.82}
-.bar nav{display:flex; align-items:center; gap:clamp(14px,2vw,30px)}
-.bar nav a:not(.btn){font-size:13px; color:var(--ink-soft); text-decoration:none;
-  transition:color .2s}
-.bar nav a:not(.btn):hover{color:var(--ink)}
-/* The CTA owns its own colour on every surface it appears. */
-.bar nav a.btn, a.btn{color:var(--papel)}
-.btn{display:inline-flex; align-items:center; justify-content:center;
-  padding:11px 20px; border-radius:999px; background:var(--oxido);
-  color:var(--papel); font-size:14px; font-weight:600; letter-spacing:.005em;
-  text-decoration:none;
-  white-space:nowrap; transition:transform .2s, background .2s}
-.btn:hover{background:#8C4224; transform:translateY(-1px)}
-.btn--ghost{background:transparent; color:var(--ink); padding-inline:0;
-  border-bottom:1px solid var(--oxido); border-radius:0}
-.btn--ghost:hover{background:transparent; color:var(--oxido)}
-@media (max-width:760px){ .bar nav a:not(.btn){display:none} }
-
-/* ── the three-speed layer field: depth with no imagery ──────────── */
+/* ── field: hairline grid, warm glow, and the dots ──────────────── */
 .field{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
 #wire{position:absolute; inset:0; width:100%; height:100%; opacity:.95}
 @media (max-width:860px){ #wire{opacity:.55} }
-.field i{position:absolute; display:block; border-radius:50%;
-  background:radial-gradient(circle at 50% 50%,
-    color-mix(in oklab,var(--ambar) 11%,transparent) 0%,
-    transparent 68%);
-  will-change:transform}
+.field i{position:absolute; display:block; border-radius:50%}
 .f1{width:76vw; height:76vw; left:-22vw; top:-14vw;
-    transform:translateY(calc(var(--y,0) * -.16px))}
-.f2{width:54vw; height:54vw; right:-16vw; top:38vh;
-    transform:translateY(calc(var(--y,0) * -.34px));
-    background:radial-gradient(circle at 50% 50%,
-      color-mix(in oklab,var(--ocre) 9%,transparent) 0%,transparent 66%)}
-.f3{width:40vw; height:40vw; left:26vw; top:120vh;
-    transform:translateY(calc(var(--y,0) * -.52px));
-    background:radial-gradient(circle at 50% 50%,
-      color-mix(in oklab,var(--ambar) 7%,transparent) 0%,transparent 64%)}
-/* hairline grid, the slowest plane */
-.grid{position:absolute; inset:-10% -10%;
+    background:radial-gradient(circle,color-mix(in oklab,var(--ambar) 11%,transparent) 0%,transparent 68%)}
+.f2{width:54vw; height:54vw; right:-16vw; bottom:-18vw;
+    background:radial-gradient(circle,color-mix(in oklab,var(--ocre) 9%,transparent) 0%,transparent 66%)}
+.grid{position:absolute; inset:0;
   background-image:
     linear-gradient(color-mix(in oklab,var(--tinta) 5%,transparent) 1px,transparent 1px),
     linear-gradient(90deg,color-mix(in oklab,var(--tinta) 5%,transparent) 1px,transparent 1px);
   background-size:clamp(70px,7vw,110px) clamp(70px,7vw,110px);
-  transform:translateY(calc(var(--y,0) * -.06px)); mask-image:linear-gradient(to bottom,
-    transparent,#000 18%,#000 76%,transparent)}
-main{position:relative; z-index:1}
+  mask-image:radial-gradient(ellipse at center,#000 30%,transparent 78%)}
 
-/* ── reveal: text arrives in layers ──────────────────────────────── */
-.r{opacity:0; transform:translateY(22px);
-  transition:opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1)}
-.r.in{opacity:1; transform:none}
-.r[data-d="1"]{transition-delay:.09s}
-.r[data-d="2"]{transition-delay:.18s}
-.r[data-d="3"]{transition-delay:.27s}
-.r[data-d="4"]{transition-delay:.36s}
+/* ── the one screen ─────────────────────────────────────────────── */
+main{position:relative; z-index:1; min-height:100svh; display:flex;
+  flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:clamp(48px,8vh,96px) var(--gut)}
+.brand{display:flex; flex-direction:column; align-items:center; gap:clamp(14px,2vh,20px)}
+.logo{width:clamp(118px,13vw,164px); height:auto; display:block}
+.wordmark{font-family:"DM Sans",sans-serif; font-weight:700;
+  font-size:clamp(22px,2.2vw,28px); letter-spacing:.01em}
+.wordmark span{font-weight:400; letter-spacing:.06em; opacity:.82}
+.eyebrow{font-size:11px; font-weight:600; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--oxido); margin-top:clamp(26px,4vh,40px)}
+.rule{width:56px; height:1px; border:0; background:var(--ambar);
+  margin:clamp(22px,3.4vh,34px) auto}
+.statement{font-family:"Instrument Serif",Georgia,serif; font-weight:400;
+  font-size:clamp(32px,4.6vw,60px); line-height:1.06; letter-spacing:-.018em;
+  max-width:17ch; text-wrap:balance}
+.statement em{font-style:italic; color:var(--oxido)}
+.btn{display:inline-flex; align-items:center; justify-content:center;
+  margin-top:clamp(30px,4.6vh,48px);
+  padding:12px 24px; border-radius:999px; background:var(--oxido);
+  color:var(--papel); font-size:14.5px; font-weight:600; letter-spacing:.005em;
+  text-decoration:none; white-space:nowrap; transition:transform .2s, background .2s}
+.btn:hover{background:#8C4224; transform:translateY(-1px)}
 
-/* ── sections ────────────────────────────────────────────────────── */
-section{padding-block:clamp(86px,15vh,190px); position:relative}
-.lead{font-size:clamp(17px,1.5vw,20px); color:var(--ink-soft); max-width:46ch}
-
-/* 1 hero */
-.hero{min-height:100svh; display:flex; align-items:center;
-  padding-top:calc(var(--bar) + 40px)}
-.hero h1{font-size:clamp(40px,7.4vw,104px); max-width:15ch}
-.hero h1 em{font-style:italic; color:var(--oxido)}
-.hero .lead{margin-top:clamp(24px,3.4vh,40px)}
-.hero .row{display:flex; flex-wrap:wrap; align-items:center; gap:clamp(16px,2.4vw,30px);
-  margin-top:clamp(30px,4.4vh,52px)}
-
-/* 2 problem — three signals */
-.sig{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));
-  gap:clamp(26px,3.4vw,58px); margin-top:clamp(40px,6vh,74px)}
-.sig div{border-top:1px solid color-mix(in oklab,var(--tinta) 20%,transparent);
-  padding-top:22px}
-.sig h3{font-size:clamp(21px,2.1vw,27px); margin-bottom:11px}
-.sig p{color:var(--ink-soft); font-size:15px}
-
-/* 3 proof — before / after */
-.ba{display:grid; grid-template-columns:1fr auto 1fr; align-items:stretch;
-  gap:clamp(18px,3vw,46px); margin-top:clamp(40px,6vh,72px)}
-.ba__col{padding:clamp(24px,2.6vw,38px); border-radius:16px}
-.ba__col--a{background:transparent;
-  border:1px solid color-mix(in oklab,var(--tinta) 16%,transparent)}
-.ba__col--b{background:transparent; border:1px solid var(--ambar);
-  box-shadow:0 1px 0 0 color-mix(in oklab,var(--ambar) 22%,transparent)}
-.ba__col p.eyebrow{margin-bottom:18px}
-.ba__col--b p.eyebrow{color:var(--oxido)}
-.ba ul{list-style:none; margin:0; padding:0; display:grid; gap:13px}
-.ba li{font-size:15px; line-height:1.45; padding-left:20px; position:relative;
-  color:var(--ink-soft)}
-.ba li::before{content:""; position:absolute; left:0; top:.6em; width:9px; height:1px;
-  background:currentColor; opacity:.55}
-.ba__col--b li{color:var(--tinta)}
-.ba__col--b li::before{background:var(--oxido); opacity:1}
-.ba__arrow{display:grid; place-items:center; color:var(--oxido)}
-.ba__arrow svg{width:26px;height:26px}
-@media (max-width:860px){
-  .ba{grid-template-columns:1fr}
-  .ba__arrow{transform:rotate(90deg); padding:4px 0}
-}
-.note{margin-top:clamp(24px,3.4vh,38px); font-size:13.5px; color:var(--ink-soft);
-  max-width:60ch}
-
-/* 4 phases */
-.ph{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));
-  gap:clamp(16px,1.9vw,26px); margin-top:clamp(40px,6vh,74px)}
-.ph article{padding:clamp(22px,2.3vw,32px); border-radius:16px;
-  border:1px solid color-mix(in oklab,var(--tinta) 14%,transparent);
-  display:flex; flex-direction:column; gap:13px}
-.ph article:first-child{border-color:var(--ambar); background:transparent}
-.ph .n{font-family:"Instrument Serif",serif; font-size:30px; color:var(--oxido);
-  line-height:1}
-.ph h3{font-size:clamp(18px,1.7vw,22px)}
-.ph p{font-size:14.5px; color:var(--ink-soft)}
-.ph .tag{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--oxido); font-weight:600}
-
-/* 5 close */
-.close{text-align:center}
-.close h2{font-size:clamp(32px,5.4vw,70px); max-width:18ch; margin-inline:auto}
-.close .lead{margin:clamp(22px,3vh,34px) auto 0; text-align:center}
-.landing{position:absolute; right:clamp(18px,7vw,120px);
-  bottom:clamp(16px,5vh,60px); width:clamp(84px,9vw,124px);
-  aspect-ratio:320/200; pointer-events:none}
-.landing svg{width:100%; height:100%; display:block; overflow:visible}
-/* The mark draws itself as a real stroke — dots only deliver it. A logo
-   built out of particles reads as pixelated, which is the opposite of a
-   brand mark. */
-.landing #pupL, .landing #pupR{
-  fill:var(--oxido); stroke:none; stroke-dasharray:none; stroke-dashoffset:0}
-.landing #lid{
-  fill:var(--papel); stroke:none; stroke-dasharray:none; stroke-dashoffset:0}
-.landing path, .landing circle{
-  fill:none; stroke:var(--oxido); stroke-linecap:round;
-  stroke-dasharray:var(--len); stroke-dashoffset:var(--len);
-  opacity:1}
-.close{position:relative}
-@media (max-width:860px){
-  .landing{right:clamp(10px,4vw,26px); bottom:clamp(8px,2vh,20px);
-    width:clamp(62px,15vw,86px)}
-}
-.close .row{display:flex; flex-wrap:wrap; gap:22px; justify-content:center;
-  align-items:center; margin-top:clamp(28px,4vh,44px)}
-
-/* footer */
-footer{border-top:1px solid color-mix(in oklab,var(--tinta) 16%,transparent);
-  padding-block:clamp(44px,6vh,70px); position:relative; z-index:1}
-.fgrid{display:grid; gap:clamp(26px,3vw,50px);
-  grid-template-columns:1.6fr repeat(3,minmax(0,1fr))}
-@media (max-width:760px){ .fgrid{grid-template-columns:1fr 1fr} }
-.fgrid h4{font-size:11px; letter-spacing:.17em; text-transform:uppercase;
-  color:var(--oxido); margin:0 0 14px; font-family:Inter; font-weight:500}
-.fgrid a,.fgrid p{font-size:13.5px; color:var(--ink-soft); text-decoration:none;
-  display:block; margin-bottom:9px}
-.fgrid a:hover{color:var(--ink)}
-.fbot{display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between;
-  align-items:center; margin-top:clamp(32px,4.4vh,54px); font-size:12px;
-  color:var(--ink-soft)}
+footer{margin-top:clamp(40px,7vh,76px); display:flex; flex-direction:column;
+  align-items:center; gap:12px; font-size:12.5px; color:var(--ink-soft)}
+footer a{text-decoration:none; border-bottom:1px solid color-mix(in oklab,var(--oxido) 50%,transparent)}
+footer a:hover{color:var(--ink)}
 .lang{display:flex; gap:5px}
 .lang button{background:none; border:1px solid color-mix(in oklab,var(--tinta) 24%,transparent);
   color:var(--ink-soft); font:inherit; font-size:11px; padding:4px 10px;
@@ -216,10 +85,17 @@ footer{border-top:1px solid color-mix(in oklab,var(--tinta) 16%,transparent);
 .lang button[aria-pressed="true"]{background:var(--oxido); color:var(--papel);
   border-color:var(--oxido)}
 
+/* ── reveal ─────────────────────────────────────────────────────── */
+.r{opacity:0; transform:translateY(18px);
+  transition:opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1)}
+.in .r{opacity:1; transform:none}
+.r[data-d="1"]{transition-delay:.1s}
+.r[data-d="2"]{transition-delay:.2s}
+.r[data-d="3"]{transition-delay:.3s}
+.r[data-d="4"]{transition-delay:.4s}
+
 @media (prefers-reduced-motion:reduce){
   .r{opacity:1 !important; transform:none !important; transition:none}
-  .field i,.grid{transform:none !important}
-  html{scroll-behavior:auto}
 }
 </style>
 </head>
@@ -228,298 +104,66 @@ footer{border-top:1px solid color-mix(in oklab,var(--tinta) 16%,transparent);
 <div class="field" aria-hidden="true">
   <div class="grid"></div>
   <canvas id="wire"></canvas>
-  <i class="f1"></i><i class="f2"></i><i class="f3"></i>
+  <i class="f1"></i><i class="f2"></i>
 </div>
 
-<header class="bar">
-  <div class="wrap">
-    <a class="mark" href="#top" aria-label="OttO Intelligence">
-      <svg viewBox="0 0 320 200" aria-hidden="true">
-        <circle cx="70" cy="70" r="50" stroke="#1A1A17" stroke-width="17" fill="none"/>
-        <circle cx="250" cy="70" r="50" stroke="#1A1A17" stroke-width="17" fill="none"/>
-        <path d="M 109 39 Q 160 31 211 39" stroke="#1A1A17" stroke-width="17" stroke-linecap="round" fill="none"/>
-        <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="#1A1A17" stroke-width="14" stroke-linecap="round" fill="none"/>
-      </svg>
-      <b>OttO<span> INTELLIGENCE</span></b>
-    </a>
-    <nav>
-      <a href="#problema" data-es="El problema" data-en="The problem">El problema</a>
-      <a href="#prueba" data-es="Cómo se ve" data-en="What it looks like">Cómo se ve</a>
-      <a href="#fases" data-es="Fases" data-en="Phases">Fases</a>
-      <a class="btn" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
-         data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
-    </nav>
+<main>
+  <div class="brand r">
+    <svg class="logo" viewBox="0 0 320 200" role="img" aria-label="OttO Intelligence">
+      <circle cx="70" cy="70" r="50" stroke="#1A1A17" stroke-width="17" fill="none"/>
+      <circle cx="250" cy="70" r="50" stroke="#1A1A17" stroke-width="17" fill="none"/>
+      <path d="M 109 39 Q 160 31 211 39" stroke="#1A1A17" stroke-width="17" stroke-linecap="round" fill="none"/>
+      <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="#1A1A17" stroke-width="14" stroke-linecap="round" fill="none"/>
+    </svg>
+    <div class="wordmark">OttO<span> INTELLIGENCE</span></div>
   </div>
-</header>
 
-<main id="top">
+  <p class="eyebrow r" data-d="1"
+     data-es="te mira · entiende · trabaja por ti"
+     data-en="observes · understands · works for you">te mira · entiende · trabaja por ti</p>
 
-  <!-- 1 ─ hero ───────────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="wrap">
-      <p class="eyebrow r" data-es="OttO Intelligence · Puerto Vallarta" data-en="OttO Intelligence · Puerto Vallarta">OttO Intelligence · Puerto Vallarta</p>
-      <h1 class="r" data-d="1"
-          data-es="Tu equipo hace a mano lo que una máquina ya <em>podría</em> hacer."
-          data-en="Your team does by hand what a machine <em>could</em> already do.">Tu equipo hace a mano lo que una máquina ya <em>podría</em> hacer.</h1>
-      <p class="lead r" data-d="2"
-         data-es="Otto encuentra ese trabajo, lo automatiza y te entrega el sistema. Tu equipo lo opera. Sin depender de nosotros."
-         data-en="Otto finds that work, automates it, and hands you the system. Your team runs it. No dependency on us.">Otto encuentra ese trabajo, lo automatiza y te entrega el sistema. Tu equipo lo opera. Sin depender de nosotros.</p>
-      <div class="row r" data-d="3">
-        <a class="btn" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
-           data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
-      </div>
+  <hr class="rule r" data-d="1">
+
+  <p class="statement r" data-d="2"
+     data-es="Soluciones para tu negocio. Sin humo. <em>IA cuando es necesario.</em>"
+     data-en="Solutions for your business. No hype. <em>AI when it’s needed.</em>">Soluciones para tu negocio. Sin humo. <em>IA cuando es necesario.</em></p>
+
+  <a class="btn r" data-d="3" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
+     data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
+
+  <footer class="r" data-d="4">
+    <span>OttO Intelligence · Puerto Vallarta · <a href="mailto:contact@otto-intel.com">contact@otto-intel.com</a></span>
+    <div class="lang">
+      <button data-lang="es" aria-pressed="true">ES</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
     </div>
-  </section>
-
-  <!-- 2 ─ the problem ────────────────────────────────────────────── -->
-  <section id="problema">
-    <div class="wrap">
-      <p class="eyebrow r" data-es="El problema" data-en="The problem">El problema</p>
-      <h2 class="r" data-d="1" style="font-size:clamp(30px,4.6vw,58px);margin-top:18px;max-width:17ch"
-          data-es="Casi siempre son las mismas tres señales."
-          data-en="It is almost always the same three signals.">Casi siempre son las mismas tres señales.</h2>
-
-      <div class="sig">
-        <div class="r" data-d="1">
-          <h3 data-es="Copiar y pegar" data-en="Copy and paste">Copiar y pegar</h3>
-          <p data-es="Alguien mueve los mismos datos entre dos sistemas, todos los días."
-             data-en="Someone moves the same data between two systems, every day.">Alguien mueve los mismos datos entre dos sistemas, todos los días.</p>
-        </div>
-        <div class="r" data-d="2">
-          <h3 data-es="Preguntar dónde está" data-en="Asking where it is">Preguntar dónde está</h3>
-          <p data-es="La información existe, pero solo una persona sabe dónde."
-             data-en="The information exists, but only one person knows where.">La información existe, pero solo una persona sabe dónde.</p>
-        </div>
-        <div class="r" data-d="3">
-          <h3 data-es="Se nota tarde" data-en="Noticed too late">Se nota tarde</h3>
-          <p data-es="El error se descubre cuando ya costó dinero."
-             data-en="The mistake surfaces once it has already cost money.">El error se descubre cuando ya costó dinero.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3 ─ proof: before / after ──────────────────────────────────── -->
-  <section id="prueba">
-    <div class="wrap">
-      <p class="eyebrow r" data-es="Cómo se ve" data-en="What it looks like">Cómo se ve</p>
-      <h2 class="r" data-d="1" style="font-size:clamp(30px,4.6vw,58px);margin-top:18px;max-width:16ch"
-          data-es="Un flujo, antes y después."
-          data-en="One workflow, before and after.">Un flujo, antes y después.</h2>
-      <p class="lead r" data-d="2" style="margin-top:20px"
-         data-es="Ejemplo de un flujo de documentos. El patrón se repite en cotizaciones, inventario y reportes."
-         data-en="A document workflow, as an example. The pattern repeats in quoting, inventory and reporting.">Ejemplo de un flujo de documentos. El patrón se repite en cotizaciones, inventario y reportes.</p>
-
-      <div class="ba">
-        <div class="ba__col ba__col--a r" data-d="1">
-          <p class="eyebrow" data-es="Antes" data-en="Before">Antes</p>
-          <ul>
-            <li data-es="Llega un documento al correo" data-en="A document lands in the inbox">Llega un documento al correo</li>
-            <li data-es="Alguien lo abre y lo lee" data-en="Someone opens and reads it">Alguien lo abre y lo lee</li>
-            <li data-es="Teclea los datos en el sistema" data-en="Types the data into the system">Teclea los datos en el sistema</li>
-            <li data-es="Lo guarda donde cree que va" data-en="Files it where they think it goes">Lo guarda donde cree que va</li>
-            <li data-es="Si se equivoca, nadie se entera" data-en="If they get it wrong, nobody finds out">Si se equivoca, nadie se entera</li>
-          </ul>
-        </div>
-
-        <div class="ba__arrow r" data-d="2" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-
-        <div class="ba__col ba__col--b r" data-d="3">
-          <p class="eyebrow" data-es="Después" data-en="After">Después</p>
-          <ul>
-            <li data-es="El sistema lo lee al llegar" data-en="The system reads it on arrival">El sistema lo lee al llegar</li>
-            <li data-es="Saca los datos que importan" data-en="Pulls the data that matters">Saca los datos que importan</li>
-            <li data-es="Los deja donde van, con la fuente" data-en="Puts it where it belongs, with the source">Los deja donde van, con la fuente</li>
-            <li data-es="Marca lo que no cuadra" data-en="Flags what does not add up">Marca lo que no cuadra</li>
-            <li data-es="Una persona aprueba, no teclea" data-en="A person approves, instead of typing">Una persona aprueba, no teclea</li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="note r" data-d="4"
-         data-es="La persona no desaparece del flujo. Deja de capturar y pasa a decidir."
-         data-en="The person does not leave the workflow. They stop capturing and start deciding.">La persona no desaparece del flujo. Deja de capturar y pasa a decidir.</p>
-    </div>
-  </section>
-
-  <!-- 4 ─ phases ─────────────────────────────────────────────────── -->
-  <section id="fases">
-    <div class="wrap">
-      <p class="eyebrow r" data-es="Cómo trabajamos" data-en="How we work">Cómo trabajamos</p>
-      <h2 class="r" data-d="1" style="font-size:clamp(30px,4.6vw,58px);margin-top:18px;max-width:17ch"
-          data-es="Cuatro fases. Puedes parar en cualquiera."
-          data-en="Four phases. You can stop at any of them.">Cuatro fases. Puedes parar en cualquiera.</h2>
-
-      <div class="ph">
-        <article class="r" data-d="1">
-          <span class="tag" data-es="Empieza aquí" data-en="Start here">Empieza aquí</span>
-          <span class="n">00</span>
-          <h3 data-es="Orientación" data-en="Orientation">Orientación</h3>
-          <p data-es="Una sesión contigo. Salimos con el cuello de botella real y qué conviene hacer. Muchas veces es lo único que hace falta."
-             data-en="One session with you. We leave with the real bottleneck and what is worth doing. Often it is the only thing needed.">Una sesión contigo. Salimos con el cuello de botella real y qué conviene hacer. Muchas veces es lo único que hace falta.</p>
-        </article>
-        <article class="r" data-d="2">
-          <span class="n">01</span>
-          <h3 data-es="Diagnóstico" data-en="Diagnosis">Diagnóstico</h3>
-          <p data-es="Antes de construir nada, saber qué hay: qué información existe, dónde vive y qué se puede mover sin romper nada."
-             data-en="Before building anything, know what exists: what information there is, where it lives, and what can move without breaking anything.">Antes de construir nada, saber qué hay: qué información existe, dónde vive y qué se puede mover sin romper nada.</p>
-        </article>
-        <article class="r" data-d="3">
-          <span class="n">02</span>
-          <h3 data-es="Implementación" data-en="Implementation">Implementación</h3>
-          <p data-es="Lo más pequeño que resuelve de verdad. Con dueño, probado contra casos reales tuyos, y con camino de respaldo cuando falle."
-             data-en="The smallest thing that genuinely solves it. With an owner, tested against your real cases, and a fallback path for when it fails.">Lo más pequeño que resuelve de verdad. Con dueño, probado contra casos reales tuyos, y con camino de respaldo cuando falle.</p>
-        </article>
-        <article class="r" data-d="4">
-          <span class="n">03</span>
-          <h3 data-es="Gobernanza" data-en="Governance">Gobernanza</h3>
-          <p data-es="Para que siga funcionando cuando ya no estemos: quién lo opera, cómo se revisa y qué se ajusta cuando el negocio cambie."
-             data-en="So it keeps working once we are gone: who runs it, how it is reviewed, and what changes when the business does.">Para que siga funcionando cuando ya no estemos: quién lo opera, cómo se revisa y qué se ajusta cuando el negocio cambie.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5 ─ close ──────────────────────────────────────────────────── -->
-  <section class="close" id="empecemos">
-    <div class="wrap">
-      <p class="eyebrow r" data-es="Empecemos" data-en="Let us start">Empecemos</p>
-      <h2 class="r" data-d="1" style="margin-top:20px"
-          data-es="Una hora, tu flujo más molesto, y una respuesta honesta."
-          data-en="One hour, your most annoying workflow, and an honest answer.">Una hora, tu flujo más molesto, y una respuesta honesta.</h2>
-      <p class="lead r" data-d="2"
-         data-es="A veces la respuesta es que no hace falta IA. Esa también sirve, y sale mucho más barata que descubrirlo a la mitad de un proyecto."
-         data-en="Sometimes the answer is that you do not need AI. That one counts too, and it is far cheaper than finding out mid-project.">A veces la respuesta es que no hace falta IA. Esa también sirve, y sale mucho más barata que descubrirlo a la mitad de un proyecto.</p>
-      <div class="landing" id="landing" aria-hidden="true">
-        <svg viewBox="0 0 320 200">
-          <circle class="mk" cx="70"  cy="70" r="50" stroke-width="17"/>
-          <circle class="mk" cx="250" cy="70" r="50" stroke-width="17"/>
-          <path   class="mk" d="M 109 39 Q 160 31 211 39" stroke-width="17"/>
-          <path   class="mk" d="M 152 150 Q 178 170 204 152 T 214 136" stroke-width="14"/>
-          <!-- pupils drift inside the lenses; the right one winks -->
-          <circle id="pupL" cx="70"  cy="70" r="13" fill="var(--oxido)" stroke="none"/>
-          <circle id="pupR" cx="250" cy="70" r="13" fill="var(--oxido)" stroke="none"/>
-          <!-- the lid is a Papel-filled disc that drops over the right lens -->
-          <clipPath id="lensR"><circle cx="250" cy="70" r="42"/></clipPath>
-          <g clip-path="url(#lensR)">
-            <rect id="lid" x="200" y="16" width="100" height="0" fill="var(--papel)"/>
-          </g>
-        </svg>
-      </div>
-      <div class="row r" data-d="3">
-        <a class="btn" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
-           data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
-      </div>
-    </div>
-  </section>
-
+  </footer>
 </main>
-
-<footer>
-  <div class="wrap">
-    <div class="fgrid">
-      <div>
-        <a class="mark" href="#top" style="margin-bottom:16px">
-          <svg viewBox="0 0 320 200" aria-hidden="true">
-            <circle cx="70" cy="70" r="50" stroke="#1A1A17" stroke-width="17" fill="none"/>
-            <circle cx="250" cy="70" r="50" stroke="#1A1A17" stroke-width="17" fill="none"/>
-            <path d="M 109 39 Q 160 31 211 39" stroke="#1A1A17" stroke-width="17" stroke-linecap="round" fill="none"/>
-            <path d="M 152 150 Q 178 170 204 152 T 214 136" stroke="#1A1A17" stroke-width="14" stroke-linecap="round" fill="none"/>
-          </svg>
-          <b>OttO<span> INTELLIGENCE</span></b>
-        </a>
-        <p data-es="Sistemas de IA que tu equipo puede operar. Puerto Vallarta, trabajando en español y en inglés."
-           data-en="AI systems your team can run. Puerto Vallarta, working in Spanish and English.">Sistemas de IA que tu equipo puede operar. Puerto Vallarta, trabajando en español y en inglés.</p>
-      </div>
-      <div>
-        <h4 data-es="El sitio" data-en="The site">El sitio</h4>
-        <a href="#problema" data-es="El problema" data-en="The problem">El problema</a>
-        <a href="#prueba" data-es="Cómo se ve" data-en="What it looks like">Cómo se ve</a>
-        <a href="#fases" data-es="Fases" data-en="Phases">Fases</a>
-      </div>
-      <div>
-        <h4 data-es="Las fases" data-en="The phases">Las fases</h4>
-        <a href="#fases" data-es="Orientación" data-en="Orientation">Orientación</a>
-        <a href="#fases" data-es="Diagnóstico" data-en="Diagnosis">Diagnóstico</a>
-        <a href="#fases" data-es="Implementación" data-en="Implementation">Implementación</a>
-        <a href="#fases" data-es="Gobernanza" data-en="Governance">Gobernanza</a>
-      </div>
-      <div>
-        <h4 data-es="Contacto" data-en="Contact">Contacto</h4>
-        <a href="mailto:contact@otto-intel.com">contact@otto-intel.com</a>
-        <a href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
-           data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
-      </div>
-    </div>
-    <div class="fbot">
-      <span>© 2026 OttO Intelligence · <span data-es="te mira · entiende · trabaja por ti" data-en="it watches · it understands · it works for you">te mira · entiende · trabaja por ti</span></span>
-      <div class="lang">
-        <button data-lang="es" aria-pressed="true">ES</button>
-        <button data-lang="en" aria-pressed="false">EN</button>
-      </div>
-    </div>
-  </div>
-</footer>
 
 <script>
 (function(){
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* reveal on enter */
-  var els = [].slice.call(document.querySelectorAll('.r'));
-  if (reduced || !('IntersectionObserver' in window)) {
-    els.forEach(function(e){ e.classList.add('in'); });
-  } else {
-    var io = new IntersectionObserver(function(rows){
-      rows.forEach(function(row){
-        if (row.isIntersecting) { row.target.classList.add('in'); io.unobserve(row.target); }
-      });
-    }, {rootMargin:'0px 0px -12% 0px', threshold:.12});
-    els.forEach(function(e){ io.observe(e); });
-  }
-
-  /* three-speed parallax field. One rAF, one custom property. */
-  if (!reduced) {
-    var field = document.querySelector('.field'), ticking = false;
-    function paint(){ field.style.setProperty('--y', String(window.scrollY)); ticking = false; }
-    addEventListener('scroll', function(){
-      if (!ticking) { ticking = true; requestAnimationFrame(paint); }
-    }, {passive:true});
-    paint();
-  }
+  requestAnimationFrame(function(){ document.body.classList.add('in'); });
 
   /* ── the dots ────────────────────────────────────────────────────
-     Packets run the grid lanes with a trailing tail, pausing at nodes,
-     never crossing the words. No lattice is ever drawn between them.
-     Near the end they converge on the mark and feed it: the logo is a
-     real stroke that draws itself as they arrive, not a picture made of
-     dots — particles at brand-mark size read as pixelation. */
+     Packets run the grid lanes with a trailing tail and never cross
+     the words: every text element is a keep-out zone, re-measured as
+     the page settles or resizes. */
   var cv = document.getElementById('wire');
   if (cv && !reduced) {
     var ctx = cv.getContext('2d'), DPR = Math.min(devicePixelRatio || 1, 2);
-    var W = 0, H = 0, STEP = 0, packets = [], last = 0;
-    var vel = 0, lastY = scrollY, prog = 0, lock = 0;
-    var zones = [], zoneT = 0, land = null, mkEls = [], mkLen = [];
-    var OXIDO = '160,78,44', AMBAR = '201,122,74', INK = '26,26,23';
+    var W = 0, H = 0, STEP = 0, packets = [], zones = [], zoneT = 0, last = 0;
+    var OXIDO = '160,78,44', AMBAR = '201,122,74';
+    var ZSEL = '.logo,.wordmark,.eyebrow,.statement,.btn,footer span,.lang';
 
-    var ZSEL = 'h1,h2,h3,p,li,.btn,.eyebrow,.bar,footer,.ba__col,.ph article';
     function measure(){
       zones = [];
-      var els = document.querySelectorAll(ZSEL), pad = 22, i;
-      for (i = 0; i < els.length; i++) {
+      var els = document.querySelectorAll(ZSEL), pad = 22;
+      for (var i = 0; i < els.length; i++) {
         var r = els[i].getBoundingClientRect();
-        if (r.bottom < -100 || r.top > H + 100) continue;
         if (r.width < 4 || r.height < 4) continue;
         zones.push({x1: r.left - pad, y1: r.top - pad, x2: r.right + pad, y2: r.bottom + pad});
       }
-      var el = document.getElementById('landing');
-      var lr = el ? el.getBoundingClientRect() : null;
-      land = (lr && lr.height > 4) ? {cx: lr.left + lr.width / 2, cy: lr.top + lr.height / 2,
-                                      top: lr.top, h: lr.height} : null;
     }
     function clear(x, y){
       for (var i = 0; i < zones.length; i++) {
@@ -528,10 +172,6 @@ footer{border-top:1px solid color-mix(in oklab,var(--tinta) 16%,transparent);
       }
       return true;
     }
-    function clearSeg(ax, ay, bx, by){
-      return clear(ax, ay) && clear(bx, by) && clear((ax + bx) / 2, (ay + by) / 2);
-    }
-
     function spawn(){
       var horiz = Math.random() < .5;
       var lane = (1 + Math.floor(Math.random() * Math.max(1, Math.floor((horiz ? H : W) / STEP) - 1))) * STEP;
@@ -539,166 +179,41 @@ footer{border-top:1px solid color-mix(in oklab,var(--tinta) 16%,transparent);
       return {horiz: horiz, lane: lane, dir: dir,
         p: dir > 0 ? -Math.random() * W : (horiz ? W : H) + Math.random() * W,
         sp: 34 + Math.random() * 46,
-        x: 0, y: 0, tx: 0, ty: 0,
         tone: Math.random() < .38 ? AMBAR : OXIDO};
     }
-
     function build(){
-      var cs = getComputedStyle(document.querySelector('.grid'));
-      STEP = parseFloat(cs.backgroundSize) || 90;
+      STEP = parseFloat(getComputedStyle(document.querySelector('.grid')).backgroundSize) || 90;
       W = cv.clientWidth; H = cv.clientHeight;
       cv.width = W * DPR; cv.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
       packets = [];
-      var want = Math.max(22, Math.min(52, Math.round(W * H / 24000)));
+      var want = Math.max(18, Math.min(40, Math.round(W * H / 30000)));
       for (var k = 0; k < want; k++) packets.push(spawn());
-
-      mkEls = [].slice.call(document.querySelectorAll('.landing .mk'));
-      mkLen = mkEls.map(function(e){
-        var L = e.getTotalLength();
-        e.style.setProperty('--len', L);
-        return L;
-      });
       measure();
     }
-
-    function step(dt){
-      zoneT -= dt;
-      if (zoneT <= 0) { measure(); zoneT = .1; }
-
-      var doc = Math.max(1, document.body.scrollHeight - innerHeight);
-      prog = Math.min(1, scrollY / doc);
-      var dy = Math.abs(scrollY - lastY); lastY = scrollY;
-      vel += (Math.min(1, dy / 42) - vel) * (dy > 0 ? .28 : .045);
-      var boost = 1 + vel * 2.4;
-
-      var near = 0;
-      if (land) {
-        var mid = land.cy;
-        near = mid < H * .95 ? 1 : Math.max(0, 1 - (mid - H * .95) / (H * .3));
-      }
-      var want = (prog > .58 ? (prog - .58) / .34 : 0);
-      var aim = Math.min(1, want) * near;
-      lock += (aim - lock) * Math.min(1, dt * (aim > lock ? 0.95 : 0.8));
-
-      /* the stroke draws itself in step with the arrival */
-      for (var e = 0; e < mkEls.length; e++) {
-        var seg = Math.max(0, Math.min(1, (lock - e * 0.14) / 0.46));
-        mkEls[e].style.strokeDashoffset = (mkLen[e] * (1 - seg)).toFixed(1);
-        mkEls[e].style.opacity = Math.min(1, lock * 1.6).toFixed(3);
-      }
-
-      for (var i = 0; i < packets.length; i++) {
-        var q = packets[i];
-
-        if (lock > .02 && land) {
-          /* converge on the mark; they deliver it, they do not become it */
-          var k2 = lock * lock;
-          q.x += (land.cx - q.x) * Math.min(1, dt * 1.25 * k2);
-          q.y += (land.cy - q.y) * Math.min(1, dt * 1.25 * k2);
-          q.tx += (q.x - q.tx) * Math.min(1, dt * 9);
-          q.ty += (q.y - q.ty) * Math.min(1, dt * 9);
-          if (lock > .55) continue;
-        }
-
-        q.p += q.dir * q.sp * boost * dt;
-        var span = q.horiz ? W : H;
-        if (q.p < -80 || q.p > span + 80) packets[i] = spawn();
-        var lx = q.horiz ? q.p : q.lane, ly = q.horiz ? q.lane : q.p;
-        var TL = 46;
-        var ltx = q.horiz ? q.p - q.dir * TL : q.lane;
-        var lty = q.horiz ? q.lane : q.p - q.dir * TL;
-        if (lock < .02) { q.x = lx; q.y = ly; q.tx = ltx; q.ty = lty; }
-        else {
-          var m = 1 - lock;
-          q.x += (lx - q.x) * Math.min(1, dt * 6 * m);
-          q.y += (ly - q.y) * Math.min(1, dt * 6 * m);
-          q.tx += (ltx - q.tx) * Math.min(1, dt * 6 * m);
-          q.ty += (lty - q.ty) * Math.min(1, dt * 6 * m);
-        }
-      }
-
-    }
-
-    function draw(){
+    function loop(t){
+      var dt = Math.min(.05, (t - last) / 1000) || .016; last = t;
+      zoneT -= dt; if (zoneT <= 0) { measure(); zoneT = .25; }
       ctx.clearRect(0, 0, W, H);
-      var fade = 1 - Math.max(0, (lock - .55) / .45);
-
       ctx.lineCap = 'round';
       for (var i = 0; i < packets.length; i++) {
         var q = packets[i];
-        if (!clearSeg(q.tx, q.ty, q.x, q.y)) continue;
-        var a = .72 * fade;
-        if (a < .01) continue;
-        var g = ctx.createLinearGradient(q.tx, q.ty, q.x, q.y);
+        q.p += q.dir * q.sp * dt;
+        var span = q.horiz ? W : H;
+        if (q.p < -80 || q.p > span + 80) { packets[i] = spawn(); continue; }
+        var x = q.horiz ? q.p : q.lane, y = q.horiz ? q.lane : q.p;
+        var tx = q.horiz ? q.p - q.dir * 46 : q.lane, ty = q.horiz ? q.lane : q.p - q.dir * 46;
+        if (!clear(x, y) || !clear(tx, ty) || !clear((x + tx) / 2, (y + ty) / 2)) continue;
+        var g = ctx.createLinearGradient(tx, ty, x, y);
         g.addColorStop(0, 'rgba(' + q.tone + ',0)');
-        g.addColorStop(1, 'rgba(' + q.tone + ',' + a + ')');
+        g.addColorStop(1, 'rgba(' + q.tone + ',.72)');
         ctx.strokeStyle = g; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(q.tx, q.ty); ctx.lineTo(q.x, q.y); ctx.stroke();
-        ctx.fillStyle = 'rgba(' + q.tone + ',' + (.95 * fade) + ')';
-        ctx.beginPath(); ctx.arc(q.x, q.y, 2.4, 0, 6.283); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
+        ctx.fillStyle = 'rgba(' + q.tone + ',.95)';
+        ctx.beginPath(); ctx.arc(x, y, 2.4, 0, 6.283); ctx.fill();
       }
+      requestAnimationFrame(loop);
     }
-
-    function loop(t){
-      var dt = Math.min(.05, (t - last) / 1000) || .016; last = t;
-      step(dt); eyes(dt); draw(); requestAnimationFrame(loop);
-    }
-
-    /* ---- eyes: a slow look around, and an occasional wink ---- */
-    var pupL = document.getElementById('pupL'),
-        pupR = document.getElementById('pupR'),
-        lid  = document.getElementById('lid');
-    var gaze = 0, gx = 0, gy = 0, tgx = 0, tgy = 0, nextGaze = 0;
-    var wink = 0, nextWink = 3.2;
-
-    function eyes(dt){
-      if (!pupL || !pupR || !lid) return;
-      /* they only come alive once the glasses have finished drawing */
-      gaze += ((lock > .80 ? 1 : 0) - gaze) * Math.min(1, dt * 2.0);
-      if (gaze < .02) { lid.setAttribute('height', 0); return; }
-
-      nextGaze -= dt;
-      if (nextGaze <= 0) {
-        tgx = (Math.random() - .5) * 26;
-        tgy = (Math.random() - .5) * 14;
-        nextGaze = 1.1 + Math.random() * 2.4;
-      }
-      gx += (tgx - gx) * Math.min(1, dt * 3.2);
-      gy += (tgy - gy) * Math.min(1, dt * 3.2);
-
-      pupL.setAttribute('cx', (70  + gx).toFixed(1));
-      pupL.setAttribute('cy', (70  + gy).toFixed(1));
-      pupR.setAttribute('cx', (250 + gx).toFixed(1));
-      pupR.setAttribute('cy', (70  + gy).toFixed(1));
-      pupL.style.opacity = gaze.toFixed(3);
-      pupR.style.opacity = gaze.toFixed(3);
-
-      /* wink: the lid drops over the right lens and lifts again */
-      nextWink -= dt;
-      if (nextWink <= 0 && wink <= 0) { wink = 1; nextWink = 4.5 + Math.random() * 4; }
-      if (wink > 0) {
-        wink -= dt * 3.1;
-        var w = Math.max(0, wink);
-        /* 1 → .5 closing, .5 → 0 opening */
-        var shut = w > .5 ? (1 - w) * 2 : w * 2;
-        lid.setAttribute('height', (Math.min(1, shut) * 100 * gaze).toFixed(1));
-      } else {
-        lid.setAttribute('height', 0);
-      }
-    }
-
-    window.__wire = function(){
-      return {prog: +prog.toFixed(3), lock: +lock.toFixed(3), packets: packets.length,
-              gaze: +gaze.toFixed(2),
-              pupil: pupL ? [+pupL.getAttribute('cx'), +pupL.getAttribute('cy')] : null,
-              lid: lid ? +lid.getAttribute('height') : null,
-              strokeDrawn: mkEls.map(function(e, i){
-                return +(1 - parseFloat(e.style.strokeDashoffset || mkLen[i]) / mkLen[i]).toFixed(2);
-              })};
-    };
-
     build();
     addEventListener('resize', build, {passive: true});
     requestAnimationFrame(function(t){ last = t; requestAnimationFrame(loop); });
