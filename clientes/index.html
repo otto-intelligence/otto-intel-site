@@ -117,7 +117,7 @@ footer a:hover{color:var(--ink)}
 </head>
 <body>
 
-<div class="field" aria-hidden="true"><div class="grid"></div><i class="f1"></i><i class="f2"></i></div>
+<div class="field" aria-hidden="true"><div class="grid"></div><canvas id="wire"></canvas><i class="f1"></i><i class="f2"></i></div>
 
 <a class="home" href="/" aria-label="OttO Intelligence — inicio">
   <svg viewBox="0 0 320 200" aria-hidden="true">
@@ -157,6 +157,142 @@ footer a:hover{color:var(--ink)}
   </footer>
 </main>
 
+<script>
+/* ── the network: clients as lit nodes on the grid; dots travel the
+   lines between them and the node pulses when one arrives. Same grid,
+   tones and keep-out zones as the home page's packets. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = document.getElementById('wire'); if (!cv) return;
+  var ctx = cv.getContext('2d'), DPR = Math.min(devicePixelRatio || 1, 2);
+  var OXIDO = '160,78,44', AMBAR = '201,122,74';
+  var ZSEL = '.home,.topnav a,.eyebrow,h1,.quote,.btn,footer span,.lang';
+  var W, H, STEP, nodes = [], edges = [], packets = [], zones = [], zoneT = 0, last = 0;
+
+  function measure(){
+    zones = [];
+    document.querySelectorAll(ZSEL).forEach(function(el){
+      var r = el.getBoundingClientRect(), pad = 26;
+      if (r.width > 4 && r.height > 4) zones.push({x1:r.left-pad, y1:r.top-pad, x2:r.right+pad, y2:r.bottom+pad});
+    });
+  }
+  function clear(x, y){
+    for (var i = 0; i < zones.length; i++) { var z = zones[i];
+      if (x > z.x1 && x < z.x2 && y > z.y1 && y < z.y2) return false; }
+    return true;
+  }
+  function pathClear(pts){
+    for (var k = 0; k < pts.length - 1; k++) {
+      var a = pts[k], b = pts[k+1], len = Math.hypot(b.x-a.x, b.y-a.y);
+      for (var d = 0; d <= len; d += 8) {
+        var t = len ? d/len : 0;
+        if (!clear(a.x + (b.x-a.x)*t, a.y + (b.y-a.y)*t)) return false;
+      }
+    }
+    return true;
+  }
+  function build(){
+    STEP = parseFloat(getComputedStyle(document.querySelector('.grid')).backgroundSize) || 90;
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+    measure();
+    /* candidate crossings outside the text, then a spread-out pick */
+    var cand = [], cols = Math.floor(W/STEP), rows = Math.floor(H/STEP);
+    for (var i = 1; i < cols; i++) for (var j = 1; j < rows; j++) {
+      var x = i*STEP, y = j*STEP; if (clear(x, y)) cand.push({x:x, y:y});
+    }
+    var want = W < 700 ? 4 : 7; nodes = [];
+    for (var n = 0; n < 400 && nodes.length < want && cand.length; n++) {
+      var c = cand[Math.floor(Math.random()*cand.length)], ok = true;
+      for (var m = 0; m < nodes.length; m++)
+        if (Math.abs(nodes[m].x-c.x) + Math.abs(nodes[m].y-c.y) < STEP*2.5) { ok = false; break; }
+      if (ok) nodes.push({x:c.x, y:c.y, pulse:0, tone: nodes.length % 3 ? AMBAR : OXIDO});
+    }
+    /* each node links to its two nearest neighbours by an L-shaped path on the grid lines */
+    edges = []; var seen = {};
+    nodes.forEach(function(a, ia){
+      nodes.map(function(b, ib){ return {ib:ib, d:Math.abs(a.x-b.x)+Math.abs(a.y-b.y)}; })
+        .filter(function(o){ return o.ib !== ia; })
+        .sort(function(p, q){ return p.d - q.d; }).slice(0, 2)
+        .forEach(function(o){
+          var key = Math.min(ia,o.ib) + '-' + Math.max(ia,o.ib); if (seen[key]) return;
+          var b = nodes[o.ib];
+          var p1 = [a, {x:b.x, y:a.y}, b], p2 = [a, {x:a.x, y:b.y}, b];
+          var pts = pathClear(p1) ? p1 : pathClear(p2) ? p2 : null;
+          if (!pts) return; seen[key] = 1;
+          var lens = [], tot = 0;
+          for (var k = 0; k < pts.length-1; k++) { var L = Math.hypot(pts[k+1].x-pts[k].x, pts[k+1].y-pts[k].y); lens.push(L); tot += L; }
+          edges.push({a:ia, b:o.ib, pts:pts, lens:lens, len:tot});
+        });
+    });
+    packets = [];
+    var count = Math.min(edges.length, W < 700 ? 3 : 6);
+    for (var q = 0; q < count; q++) packets.push(spawn(edges[q % edges.length], Math.random() < .5, Math.random()));
+  }
+  function spawn(e, fwd, t){ return {e:e, fwd:fwd, t:(t||0)*e.len, sp:48 + Math.random()*30}; }
+  function at(e, d){
+    d = Math.max(0, Math.min(e.len, d));
+    for (var k = 0; k < e.lens.length; k++) {
+      if (d <= e.lens[k] || k === e.lens.length-1) {
+        var a = e.pts[k], b = e.pts[k+1], t = e.lens[k] ? d/e.lens[k] : 0;
+        return {x:a.x + (b.x-a.x)*t, y:a.y + (b.y-a.y)*t};
+      }
+      d -= e.lens[k];
+    }
+  }
+  function loop(t){
+    var dt = Math.min(.05, (t - last)/1000) || .016; last = t;
+    zoneT -= dt; if (zoneT <= 0) { measure(); zoneT = .3; }
+    ctx.clearRect(0, 0, W, H); ctx.lineCap = 'round';
+    /* the network itself: faint lines */
+    ctx.lineWidth = 1;
+    edges.forEach(function(e){
+      ctx.strokeStyle = 'rgba(' + AMBAR + ',.22)'; ctx.beginPath();
+      ctx.moveTo(e.pts[0].x, e.pts[0].y);
+      for (var k = 1; k < e.pts.length; k++) ctx.lineTo(e.pts[k].x, e.pts[k].y);
+      ctx.stroke();
+    });
+    /* travelling dots */
+    packets.forEach(function(p, i){
+      p.t += p.sp * dt;
+      var e = p.e;
+      if (p.t >= e.len) {
+        var arrive = p.fwd ? e.b : e.a; nodes[arrive].pulse = 1;
+        var next = edges.filter(function(x){ return (x.a === arrive || x.b === arrive) && x !== e; });
+        var ne = next.length ? next[Math.floor(Math.random()*next.length)] : e;
+        packets[i] = spawn(ne, ne.a === arrive, 0); return;
+      }
+      var d = p.fwd ? p.t : e.len - p.t, dt2 = p.fwd ? -40 : 40;
+      var head = at(e, d), tail = at(e, d + dt2);
+      if (!clear(head.x, head.y)) return;
+      var g = ctx.createLinearGradient(tail.x, tail.y, head.x, head.y);
+      g.addColorStop(0, 'rgba(' + OXIDO + ',0)'); g.addColorStop(1, 'rgba(' + OXIDO + ',.75)');
+      ctx.strokeStyle = g; ctx.lineWidth = 2; ctx.beginPath();
+      /* tail follows the path around the corner */
+      var steps = 6; ctx.moveTo(tail.x, tail.y);
+      for (var s2 = 1; s2 <= steps; s2++) { var pt = at(e, d + dt2*(1 - s2/steps)); ctx.lineTo(pt.x, pt.y); }
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(' + OXIDO + ',.95)'; ctx.beginPath(); ctx.arc(head.x, head.y, 2.4, 0, 6.283); ctx.fill();
+    });
+    /* nodes and their arrival pulse */
+    nodes.forEach(function(n){
+      if (!clear(n.x, n.y)) return;
+      if (n.pulse > 0) {
+        n.pulse = Math.max(0, n.pulse - dt*0.9);
+        var r = 5 + (1 - n.pulse) * 20;
+        ctx.strokeStyle = 'rgba(' + n.tone + ',' + (n.pulse*.55).toFixed(3) + ')'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, 6.283); ctx.stroke();
+      }
+      ctx.fillStyle = 'rgba(' + n.tone + ',.18)'; ctx.beginPath(); ctx.arc(n.x, n.y, 8, 0, 6.283); ctx.fill();
+      ctx.fillStyle = 'rgba(' + n.tone + ',.95)'; ctx.beginPath(); ctx.arc(n.x, n.y, 3.6, 0, 6.283); ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  function start(){ build(); requestAnimationFrame(function(t){ last = t; requestAnimationFrame(loop); }); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start); else start();
+  var rt; addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(build, 150); }, {passive:true});
+})();
+</script>
 <script>
 (function(){
   var btns = [].slice.call(document.querySelectorAll('.lang button'));
