@@ -147,6 +147,23 @@ footer a:hover{color:var(--ink)}
   .steps{grid-template-columns:1fr; max-width:34ch; margin-inline:auto}
 }
 
+/* ── top-right nav + client quotes ───────────────────────────────── */
+.topnav{position:absolute; top:clamp(14px,2.4vh,26px); right:var(--gut); z-index:3;
+  display:flex; align-items:center; gap:clamp(14px,1.8vw,22px); font-size:13.5px; font-weight:500}
+.topnav a{text-decoration:none; color:var(--ink)}
+.topnav a.link:hover{color:var(--oxido)}
+.topnav .pill{padding:7px 15px; border-radius:999px; background:var(--oxido); color:var(--papel)}
+.topnav .pill:hover{background:#8C4224}
+.quotes{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));
+  gap:clamp(16px,2vw,24px); margin:clamp(30px,4.6vh,46px) auto 0; max-width:640px; text-align:left}
+.quote{margin:0; padding:clamp(22px,3vw,32px); border:1px solid color-mix(in oklab,var(--ambar) 45%,transparent);
+  border-radius:14px; background:color-mix(in oklab,var(--papel) 82%,#fff); display:flex; flex-direction:column; gap:18px}
+.quote img{height:24px; width:auto; align-self:flex-start; mix-blend-mode:multiply}
+.quote blockquote{margin:0; font-family:"Instrument Serif",Georgia,serif;
+  font-size:clamp(21px,2vw,26px); line-height:1.3; text-wrap:pretty}
+.quote figcaption{font-size:13px; color:var(--ink-soft)}
+.quote figcaption b{color:var(--ink); font-weight:600}
+
 /* ── reveal ─────────────────────────────────────────────────────── */
 .r{opacity:0; transform:translateY(18px);
   transition:opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1)}
@@ -168,6 +185,12 @@ footer a:hover{color:var(--ink)}
   <canvas id="wire"></canvas>
   <i class="f1"></i><i class="f2"></i>
 </div>
+
+<nav class="topnav" aria-label="Principal">
+  <a class="link" href="#clientes" data-es="Clientes" data-en="Clients">Clientes</a>
+  <a class="pill" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
+     data-es="Agenda" data-en="Book">Agenda</a>
+</nav>
 
 <main>
   <div class="brand r">
@@ -225,6 +248,18 @@ footer a:hover{color:var(--ink)}
   </ul>
 </section>
 
+<section class="sec" id="clientes" aria-labelledby="h-clientes">
+  <p class="eyebrow" id="h-clientes" data-es="Lo que dicen nuestros clientes" data-en="What our clients say">Lo que dicen nuestros clientes</p>
+  <div class="quotes">
+    <figure class="quote">
+      <img src="img/83grados-logo.jpg" alt="83grados Estudio del Té" width="283" height="24">
+      <blockquote data-es="“Antes de proponer nada, nos preguntaron cómo trabajamos. Queríamos un punto de venta que se adaptara al estudio, no al revés: ventas, gastos y corte de caja en un solo lugar, y nada que no usemos.”"
+                  data-en="“Before proposing anything, they asked how we work. We wanted a point of sale that fit the studio, not the other way around: sales, expenses and cash closing in one place, and nothing we don’t use.”">“Antes de proponer nada, nos preguntaron cómo trabajamos. Queríamos un punto de venta que se adaptara al estudio, no al revés: ventas, gastos y corte de caja en un solo lugar, y nada que no usemos.”</blockquote>
+      <figcaption data-es="<b>[NOMBRE]</b>, socio · 83grados Estudio del Té" data-en="<b>[NAME]</b>, partner · 83grados Estudio del Té"><b>[NOMBRE]</b>, socio · 83grados Estudio del Té</figcaption>
+    </figure>
+  </div>
+</section>
+
 <section class="sec close">
   <p class="statement" data-es="45 minutos para <em>entender tu negocio.</em>" data-en="45 minutes to <em>understand your business.</em>">45 minutos para <em>entender tu negocio.</em></p>
   <a class="btn" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
@@ -252,7 +287,7 @@ footer a:hover{color:var(--ink)}
     var ctx = cv.getContext('2d'), DPR = Math.min(devicePixelRatio || 1, 2);
     var W = 0, H = 0, STEP = 0, packets = [], zones = [], zoneT = 0, last = 0;
     var OXIDO = '160,78,44', AMBAR = '201,122,74';
-    var ZSEL = '.logo,.wordmark,.eyebrow,.statement,.btn,footer span,.lang,.sec h2,.step,.nolist li';
+    var ZSEL = '.logo,.wordmark,.eyebrow,.statement,.btn,footer span,.lang,.sec h2,.step,.nolist li,.quote,.topnav a';
 
     function measure(){
       zones = [];
