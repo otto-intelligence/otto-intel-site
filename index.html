@@ -83,7 +83,7 @@ a{color:inherit}
   mask-image:radial-gradient(ellipse at center,#000 30%,transparent 78%)}
 
 /* ── the one screen ─────────────────────────────────────────────── */
-main{position:relative; z-index:1; min-height:100svh; display:flex;
+main{position:relative; z-index:1; min-height:84svh; display:flex;
   flex-direction:column; align-items:center; justify-content:center;
   text-align:center; padding:clamp(48px,8vh,96px) var(--gut)}
 .brand{display:flex; flex-direction:column; align-items:center; gap:clamp(14px,2vh,20px)}
@@ -116,6 +116,36 @@ footer a:hover{color:var(--ink)}
   border-radius:99px; cursor:pointer; letter-spacing:.06em}
 .lang button[aria-pressed="true"]{background:var(--oxido); color:var(--papel);
   border-color:var(--oxido)}
+
+/* ── below the fold: how we start, what we don't do, close ──────── */
+.sec{position:relative; z-index:1; max-width:980px; margin:0 auto;
+  padding:clamp(40px,7vh,96px) var(--gut); text-align:center}
+.sec + .sec{padding-top:0}
+.sec .eyebrow{margin-top:0}
+.sec h2{font-family:"Instrument Serif",Georgia,serif; font-weight:400;
+  font-size:clamp(30px,3.6vw,46px); line-height:1.08; letter-spacing:-.015em;
+  margin:14px auto 0; max-width:18ch; text-wrap:balance}
+.sec h2 em{font-style:italic; color:var(--oxido)}
+.steps{list-style:none; margin:clamp(34px,5vh,52px) 0 0; padding:0;
+  display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(18px,2.4vw,32px);
+  counter-reset:step; text-align:left}
+.step{counter-increment:step; padding-top:16px;
+  border-top:1px solid color-mix(in oklab,var(--ambar) 70%,transparent)}
+.step::before{content:counter(step); display:block; font-family:"Instrument Serif",Georgia,serif;
+  font-size:28px; line-height:1; color:var(--oxido); margin-bottom:10px}
+.step b{display:block; font-weight:600; font-size:1.02em; margin-bottom:4px}
+.step span{display:block; color:var(--ink-soft)}
+.nolist{list-style:none; margin:clamp(26px,4vh,40px) auto 0; padding:0;
+  display:flex; flex-direction:column; gap:12px; max-width:32ch}
+.nolist li{font-family:"Instrument Serif",Georgia,serif; font-size:clamp(21px,2vw,27px);
+  line-height:1.25; text-wrap:balance}
+.nolist li em{font-style:italic; color:var(--oxido)}
+.close .statement{font-size:clamp(28px,3.4vw,44px); margin:0 auto}
+.close .btn{margin-top:clamp(24px,3.6vh,36px)}
+.close footer{margin-top:clamp(48px,8vh,84px)}
+@media (max-width:760px){
+  .steps{grid-template-columns:1fr; max-width:34ch; margin-inline:auto}
+}
 
 /* ── reveal ─────────────────────────────────────────────────────── */
 .r{opacity:0; transform:translateY(18px);
@@ -161,16 +191,52 @@ footer a:hover{color:var(--ink)}
      data-en="Solutions for your business. No hype. <em>AI when it’s needed.</em>">Soluciones para tu negocio. Sin humo. <em>IA cuando es necesario.</em></p>
 
   <a class="btn r" data-d="3" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
-     data-es="Agenda una sesión" data-en="Book a session">Agenda una sesión</a>
+     data-es="Agenda una sesión de 45 min" data-en="Book a 45-min session">Agenda una sesión de 45 min</a>
+</main>
 
-  <footer class="r" data-d="4">
+<section class="sec" aria-labelledby="h-entender">
+  <p class="eyebrow" data-es="Cómo empezamos" data-en="How we start">Cómo empezamos</p>
+  <h2 id="h-entender" data-es="Primero <em>entendemos.</em>" data-en="First, we <em>understand.</em>">Primero <em>entendemos.</em></h2>
+  <ol class="steps">
+    <li class="step">
+      <b data-es="Escuchamos." data-en="We listen.">Escuchamos.</b>
+      <span data-es="Cómo trabaja tu negocio hoy: quién hace qué, con qué herramientas y dónde se atora."
+            data-en="How your business runs today: who does what, with which tools, and where it gets stuck.">Cómo trabaja tu negocio hoy: quién hace qué, con qué herramientas y dónde se atora.</span>
+    </li>
+    <li class="step">
+      <b data-es="Encontramos el problema real." data-en="We find the real problem.">Encontramos el problema real.</b>
+      <span data-es="Dónde se pierde el tiempo o el dinero, antes de hablar de tecnología."
+            data-en="Where time or money is lost, before anyone talks about technology.">Dónde se pierde el tiempo o el dinero, antes de hablar de tecnología.</span>
+    </li>
+    <li class="step">
+      <b data-es="Decidimos juntos." data-en="We decide together.">Decidimos juntos.</b>
+      <span data-es="Si la IA ayuda, la usamos. Si no, te lo decimos."
+            data-en="If AI helps, we use it. If it doesn’t, we tell you.">Si la IA ayuda, la usamos. Si no, te lo decimos.</span>
+    </li>
+  </ol>
+</section>
+
+<section class="sec" aria-labelledby="h-no">
+  <p class="eyebrow" id="h-no" data-es="Lo que no hacemos" data-en="What we don’t do">Lo que no hacemos</p>
+  <ul class="nolist">
+    <li data-es="No vendemos <em>chatbots genéricos.</em>" data-en="We don’t sell <em>generic chatbots.</em>">No vendemos <em>chatbots genéricos.</em></li>
+    <li data-es="No automatizamos <em>por automatizar.</em>" data-en="We don’t automate <em>for the sake of it.</em>">No automatizamos <em>por automatizar.</em></li>
+    <li data-es="No te dejamos un sistema <em>que nadie sabe usar.</em>" data-en="We don’t leave you a system <em>nobody knows how to use.</em>">No te dejamos un sistema <em>que nadie sabe usar.</em></li>
+  </ul>
+</section>
+
+<section class="sec close">
+  <p class="statement" data-es="45 minutos para <em>entender tu negocio.</em>" data-en="45 minutes to <em>understand your business.</em>">45 minutos para <em>entender tu negocio.</em></p>
+  <a class="btn" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
+     data-es="Agenda una sesión de 45 min" data-en="Book a 45-min session">Agenda una sesión de 45 min</a>
+  <footer>
     <span>OttO Intelligence · Puerto Vallarta · <a href="mailto:contact@otto-intel.com">contact@otto-intel.com</a></span>
     <div class="lang">
       <button data-lang="es" aria-pressed="true">ES</button>
       <button data-lang="en" aria-pressed="false">EN</button>
     </div>
   </footer>
-</main>
+</section>
 
 <script>
 (function(){
@@ -186,7 +252,7 @@ footer a:hover{color:var(--ink)}
     var ctx = cv.getContext('2d'), DPR = Math.min(devicePixelRatio || 1, 2);
     var W = 0, H = 0, STEP = 0, packets = [], zones = [], zoneT = 0, last = 0;
     var OXIDO = '160,78,44', AMBAR = '201,122,74';
-    var ZSEL = '.logo,.wordmark,.eyebrow,.statement,.btn,footer span,.lang';
+    var ZSEL = '.logo,.wordmark,.eyebrow,.statement,.btn,footer span,.lang,.sec h2,.step,.nolist li';
 
     function measure(){
       zones = [];
