@@ -187,7 +187,7 @@ footer a:hover{color:var(--ink)}
 </div>
 
 <nav class="topnav" aria-label="Principal">
-  <a class="link" href="#clientes" data-es="Clientes" data-en="Clients">Clientes</a>
+  <a class="link" href="/clientes/" data-es="Clientes" data-en="Clients">Clientes</a>
   <a class="pill" href="https://calendar.app.google/1iwp2jQMvfQu6sW6A" target="_blank" rel="noopener"
      data-es="Agenda" data-en="Book">Agenda</a>
 </nav>
@@ -246,18 +246,6 @@ footer a:hover{color:var(--ink)}
     <li data-es="No automatizamos <em>por automatizar.</em>" data-en="We don’t automate <em>for the sake of it.</em>">No automatizamos <em>por automatizar.</em></li>
     <li data-es="No te dejamos un sistema <em>que nadie sabe usar.</em>" data-en="We don’t leave you a system <em>nobody knows how to use.</em>">No te dejamos un sistema <em>que nadie sabe usar.</em></li>
   </ul>
-</section>
-
-<section class="sec" id="clientes" aria-labelledby="h-clientes">
-  <p class="eyebrow" id="h-clientes" data-es="Lo que dicen nuestros clientes" data-en="What our clients say">Lo que dicen nuestros clientes</p>
-  <div class="quotes">
-    <figure class="quote">
-      <img src="img/83grados-logo.jpg" alt="83grados Estudio del Té" width="283" height="24">
-      <blockquote data-es="“Antes de proponer nada, nos preguntaron cómo trabajamos. Queríamos un punto de venta que se adaptara al estudio, no al revés: ventas, gastos y corte de caja en un solo lugar, y nada que no usemos.”"
-                  data-en="“Before proposing anything, they asked how we work. We wanted a point of sale that fit the studio, not the other way around: sales, expenses and cash closing in one place, and nothing we don’t use.”">“Antes de proponer nada, nos preguntaron cómo trabajamos. Queríamos un punto de venta que se adaptara al estudio, no al revés: ventas, gastos y corte de caja en un solo lugar, y nada que no usemos.”</blockquote>
-      <figcaption data-es="<b>[NOMBRE]</b>, socio · 83grados Estudio del Té" data-en="<b>[NAME]</b>, partner · 83grados Estudio del Té"><b>[NOMBRE]</b>, socio · 83grados Estudio del Té</figcaption>
-    </figure>
-  </div>
 </section>
 
 <section class="sec close">
@@ -360,8 +348,10 @@ footer a:hover{color:var(--ink)}
       el.innerHTML = el.getAttribute('data-' + l);
     });
     btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.lang === l)); });
+    try { localStorage.setItem('otto-lang', l); } catch(e) {}
   }
   btns.forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.lang); }); });
+  try { if (localStorage.getItem('otto-lang') === 'en') setLang('en'); } catch(e) {}
 })();
 </script>
 </body>
